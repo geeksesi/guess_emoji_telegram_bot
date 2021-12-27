@@ -1,5 +1,5 @@
 <?php
-define('TOKEN', '2105225490:AAFPOMU7VtNm77hRpwQcdKO5GlQXIhJpDTg');
+define('TOKEN', '2105225490:AAHMduRnGXLoBVhFF6bxOnKX4lS9YkJ6deE');
 define('UPDATE_ID_FILE', __DIR__ . '/update_id.txt');
 
 $url = 'https://api.telegram.org/bot' . TOKEN . '/';
