@@ -22,3 +22,11 @@
 - [Instagram - mohammad Javad Ghasemy](https://www.instagram.com/geeksesi_ir/)
 - [Telegram - Geeksesi Channel](https://t.me/geeksesi)
 - [گروه پرسش و پاسخ تلگرام ](https://t.me/geeksesi_group)
+
+## TIPS :
+
+برای اجرای ربات به شیوه ای که اخر ویدئو چهارم توضیح دادیم کافیه این کامند رو داخل بش اسکریپت خودتون اجرا کنید :
+
+```
+while true; do php index.php; done
+```
