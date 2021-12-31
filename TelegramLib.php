@@ -62,14 +62,27 @@ class TelegraLib
      *
      * @return  array              [return description]
      */
-    public static function send_message(string $_text, string $_chat_id): array|bool
+    public static function send_message(string $_text, string $_chat_id, array $_keyboard = []): array|bool
     {
         $parameters = [
             "text" => $_text,
             "chat_id" => $_chat_id
         ];
+        if (!empty($_keyboard)) {
+            $parameters["reply_markup"] = $_keyboard;
+        }
         return self::execute('sendMessage', $parameters);
     }
+
+    public static function make_keyboard(array $_keyboard, bool $_resize = false, bool $_one_time = false)
+    {
+        return [
+            "keyboard" => $_keyboard,
+            "resize_keyboard" => $_resize,
+            "one_time_keyboard" => $_one_time,
+        ];
+    }
+
 
     /**
      * [get_update description]
