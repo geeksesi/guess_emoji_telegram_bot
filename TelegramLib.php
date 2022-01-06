@@ -74,7 +74,15 @@ class TelegraLib
         return self::execute('sendMessage', $parameters);
     }
 
-    public static function make_keyboard(array $_keyboard, bool $_resize = false, bool $_one_time = false)
+    /**
+     * Undocumented function
+     *
+     * @param array $_keyboard
+     * @param boolean $_resize
+     * @param boolean $_one_time
+     * @return array
+     */
+    public static function make_keyboard(array $_keyboard, bool $_resize = false, bool $_one_time = false): array
     {
         return [
             "keyboard" => $_keyboard,
