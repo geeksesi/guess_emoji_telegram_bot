@@ -6,57 +6,79 @@ class Model
 
     public function __construct()
     {
-        $this->db = new SQLite3('db.sqlite');
+        $this->db = new SQLite3(__DIR__ . '/db.sqlite');
     }
 
-    public function migrate()
+    public function migration()
     {
-        // levels table
         $this->db->query(
-            'CREATE TABLE levels (ID INT PRIMARY KEY NOT NULL, question TEXT NOT NULL, answer TEXT NOT NULL)'
+            'CREATE TABLE levels (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL UNIQUE, answer TEXT NOT NULL)'
         );
-        // Users table
+
+        /**
+         *  current_status
+         * 0 - level
+         * 1 - add question
+         */
+
         $this->db->query(
-            'CREATE TABLE users (
-                ID INT PRIMARY KEY NOT NULL, 
-                user_id TEXT NOT NULL,
-                level_id INT,
-            )'
+            'CREATE TABLE users (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chat_id TEXT NOT NULL UNIQUE, level_id INT DEFAULT 1, current_status INTEGER DEFAULT 0)'
         );
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $chat_id
-     * @param string $answer
-     * @return boolean
-     */
-    public function check_answer(string $chat_id, string $answer): array|bool
+    public function add_level(string $question, string $answer): bool
     {
-        $user_query = $this->db->prepare(
-            'SELECT * FROM users WHERE user_id=:user_id LIMIT 1'
+        $query = $this->db->prepare(
+            'INSERT INTO levels (question,answer) VALUES (:question, :answer)'
         );
-        $user_query->bindValue(':user_id', $chat_id, SQLITE3_TEXT);
-        $user = $user_query->execute();
-        $user = $user->fetchArray(SQLITE3_ASSOC);
+        $query->bindValue(':question', $question, SQLITE3_TEXT);
+        $query->bindValue(':answer', $answer, SQLITE3_TEXT);
+        $result = $query->execute();
+        return (bool) $result;
+    }
 
-        $level_id = $user['level_id'];
-
-        $level_query = $this->db->prepare(
-            'SELECT * FROM levels WHERE ID=:id AND  answer LIKE :answer LIMIT 1'
+    public function add_user(string $chat_id): bool
+    {
+        $query = $this->db->prepare(
+            'INSERT INTO users (chat_id) VALUES (:chat_id)'
         );
-        $level_query->bindValue(':id', $level_id, SQLITE3_INTEGER);
-        $level_query->bindValue(':answer', $answer, SQLITE3_TEXT);
-        $level = $level_query->execute();
-        while ($level->fetchArray(SQLITE3_ASSOC)) {
-            return $this->lvl_up($user["ID"], $level["ID"]);
+        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
+        $result = $query->execute();
+        return (bool) $result;
+    }
+
+    public function get_user_level(string $chat_id): int
+    {
+        $query = $this->db->prepare(
+            'SELECT level_id FROM users WHERE chat_id=:chat_id'
+        );
+        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
+        $result = $query->execute();
+        return $result->fetchArray(SQLITE3_ASSOC)[0]['level_id'];
+    }
+
+    public function check_answer(string $chat_id, string $text): bool
+    {
+        $query = $this->db->prepare(
+            'SELECT * FROM user WHERE chat_id=:chat_id AND level_id=(SELECT ID FROM levels WHERE answer like :answer)'
+        );
+        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
+        $query->bindValue(':answer', $text, SQLITE3_TEXT);
+        $result = $query->execute();
+        if ($result->numColumns()) {
+            return true;
         }
         return false;
     }
 
-    public function lvl_up(int $user_id, int $current_level): array
+    public function update_user_status(string $chat_id, int $status)
     {
-        # code...
+        $query = $this->db->prepare(
+            'UPDATE users SET current_status=:status WHERE  chat_id=:chat_id'
+        );
+        $query->bindValue(':current_status', $status, SQLITE3_INTEGER);
+        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
+        $result = $query->execute();
+        return (bool) $result;
     }
 }

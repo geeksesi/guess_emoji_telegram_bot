@@ -1,3 +1,4 @@
 env.php
 node_modules/
 packag*.json
+*.sqlite

@@ -4,6 +4,13 @@ class Controller
 {
     private $update;
     private $chat_id;
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new Model();
+    }
+
     public function check_predefine_messages($text)
     {
         switch ($text) {
@@ -60,5 +67,25 @@ class Controller
             '🏀🔛',
             $this->update['message']['chat']['id']
         );
+    }
+
+    public function create_level_request()
+    {
+        $text = filter_var(
+            $this->update['message']['text'],
+            FILTER_SANITIZE_STRING
+        );
+        list($question, $answer) = explode(' , ', $text);
+        $this->model->add_level($question, $answer);
+    }
+
+    public function create_level()
+    {
+        $text = filter_var(
+            $this->update['message']['text'],
+            FILTER_SANITIZE_STRING
+        );
+        list($question, $answer) = explode(' , ', $text);
+        $this->model->add_level($question, $answer);
     }
 }
