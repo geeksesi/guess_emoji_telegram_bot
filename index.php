@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . '/env.php';
 include __DIR__ . '/TelegramLib.php';
+include __DIR__ . '/Model.php';
 include __DIR__ . '/Controller.php';
 
 $updates = TelegraLib::get_update();

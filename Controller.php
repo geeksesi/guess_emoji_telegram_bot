@@ -4,6 +4,14 @@ class Controller
 {
     private $update;
     private $chat_id;
+    private $user;
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new Model();
+    }
+
     public function check_predefine_messages($text)
     {
         switch ($text) {
@@ -11,19 +19,25 @@ class Controller
                 $this->start_cmd();
                 break;
             case 'دیدن سوال':
-                $this->starter_question();
+                $this->question();
                 break;
 
             default:
                 $this->run_game($text);
+                $this->question();
                 break;
         }
     }
 
     public function run_game($_text)
     {
-        if ($_text === 'بالون') {
+        $level = $this->model->get_level($this->user['level_id']);
+
+        if (strtolower($_text) === $level['answer']) {
             TelegraLib::send_message('تبریک شما برنده شدید 🥇', $this->chat_id);
+            $this->model->next_level($this->user['id'], $level['id'] + 1);
+            $this->user = $this->model->get_user($this->chat_id);
+
             return;
         }
         TelegraLib::send_message('لطفا دوباره تلاش کنید 🙁', $this->chat_id);
@@ -33,9 +47,11 @@ class Controller
     {
         $this->update = $update;
         $this->chat_id = $this->update['message']['chat']['id'];
+        $this->user = $this->model->get_user($this->chat_id);
+
         $text = $update['message']['text'];
 
-        var_dump($text);
+        // var_dump($text);
         $this->check_predefine_messages($text);
     }
 
@@ -54,10 +70,11 @@ class Controller
         );
     }
 
-    public function starter_question()
+    public function question()
     {
+        $level = $this->model->get_level($this->user['level_id']);
         TelegraLib::send_message(
-            '🏀🔛',
+            $level['quest'],
             $this->update['message']['chat']['id']
         );
     }
