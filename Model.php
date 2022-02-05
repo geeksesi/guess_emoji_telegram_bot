@@ -6,79 +6,103 @@ class Model
 
     public function __construct()
     {
-        $this->db = new SQLite3(__DIR__ . '/db.sqlite');
+        $this->db = new SQLite3('database.sqlite');
     }
 
-    public function migration()
+    public function make_levels_table()
     {
         $this->db->query(
-            'CREATE TABLE levels (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL UNIQUE, answer TEXT NOT NULL)'
+            'CREATE TABLE levels (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, quest TEXT UNIQUE NOT NULL, answer TEXT NOT NULL)'
         );
+    }
 
-        /**
-         *  current_status
-         * 0 - level
-         * 1 - add question
-         */
-
+    public function make_users_table()
+    {
         $this->db->query(
-            'CREATE TABLE users (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, chat_id TEXT NOT NULL UNIQUE, level_id INT DEFAULT 1, current_status INTEGER DEFAULT 0)'
+            'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, chat_id TEXT UNIQUE NOT NULL, level_id TEXT NOT NULL)'
         );
     }
 
-    public function add_level(string $question, string $answer): bool
+    public function add_level(string $_question, string $_answer): bool
     {
         $query = $this->db->prepare(
-            'INSERT INTO levels (question,answer) VALUES (:question, :answer)'
+            'INSERT INTO levels (quest,answer) VALUES (:quest, :answer)'
         );
-        $query->bindValue(':question', $question, SQLITE3_TEXT);
-        $query->bindValue(':answer', $answer, SQLITE3_TEXT);
-        $result = $query->execute();
-        return (bool) $result;
+        $query->bindValue(':quest', $_question, SQLITE3_TEXT);
+        $query->bindValue(':answer', strtolower($_answer), SQLITE3_TEXT);
+
+        return (bool) $query->execute();
     }
 
-    public function add_user(string $chat_id): bool
+    public function get_first_level_id(): int
     {
-        $query = $this->db->prepare(
-            'INSERT INTO users (chat_id) VALUES (:chat_id)'
+        $query = $this->db->query(
+            'SELECT * FROM levels order by id asc limit 1'
         );
-        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
-        $result = $query->execute();
-        return (bool) $result;
+        $row = $query->fetchArray(SQLITE3_ASSOC);
+        return $row['id'];
     }
 
-    public function get_user_level(string $chat_id): int
+    public function add_user(string $_chat_id): bool
     {
+        $level_id = $this->get_first_level_id();
         $query = $this->db->prepare(
-            'SELECT level_id FROM users WHERE chat_id=:chat_id'
+            'INSERT INTO users (chat_id, level_id) VALUES (:chat_id, :level_id)'
         );
-        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
-        $result = $query->execute();
-        return $result->fetchArray(SQLITE3_ASSOC)[0]['level_id'];
+        $query->bindValue(':chat_id', $_chat_id, SQLITE3_TEXT);
+        $query->bindValue(':level_id', $level_id, SQLITE3_INTEGER);
+
+        return (bool) $query->execute();
     }
 
-    public function check_answer(string $chat_id, string $text): bool
+    public function levels(): array
+    {
+        $query = $this->db->query('SELECT * FROM levels');
+        $output = [];
+        while ($row = $query->fetchArray(SQLITE3_ASSOC)) {
+            $output[] = $row;
+        }
+        return $output;
+    }
+
+    public function get_user(string $_chat_id): array
     {
         $query = $this->db->prepare(
-            'SELECT * FROM user WHERE chat_id=:chat_id AND level_id=(SELECT ID FROM levels WHERE answer like :answer)'
+            'SELECT * FROM users WHERE chat_id=:chat_id'
         );
-        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
-        $query->bindValue(':answer', $text, SQLITE3_TEXT);
+        $query->bindValue(':chat_id', $_chat_id, SQLITE3_TEXT);
         $result = $query->execute();
-        if ($result->numColumns()) {
-            return true;
+        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            return $row;
+        }
+        if (!$this->add_user($_chat_id)) {
+            throw new Exception("Can't create user");
+        }
+        return $this->get_user($_chat_id);
+    }
+
+    public function get_level(int $_id): array|false
+    {
+        $query = $this->db->prepare('SELECT * FROM levels WHERE id=:id');
+        $query->bindValue(':id', $_id, SQLITE3_INTEGER);
+
+        $result = $query->execute();
+        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            return $row;
         }
         return false;
     }
 
-    public function update_user_status(string $chat_id, int $status)
+    public function next_level(string $_id, int $_level_id):bool
     {
         $query = $this->db->prepare(
-            'UPDATE users SET current_status=:status WHERE  chat_id=:chat_id'
+            'UPDATE users SET level_id=:level_id WHERE id=:id'
         );
-        $query->bindValue(':current_status', $status, SQLITE3_INTEGER);
-        $query->bindValue(':chat_id', $chat_id, SQLITE3_TEXT);
-        $result = $query->execute();
-        return (bool) $result;
+        $query->bindValue(':level_id', $_level_id, SQLITE3_INTEGER);
+        $query->bindValue(':id', $_id, SQLITE3_TEXT);
+
+        return (bool) $query->execute();
+        
     }
+
 }
