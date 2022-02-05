@@ -6,7 +6,7 @@ class Model
 
     public function __construct()
     {
-        $this->db = new SQLite3('database.sqlite');
+        $this->db = new SQLite3(__DIR__ . '/../database.sqlite');
     }
 
     public function make_levels_table()
@@ -81,7 +81,7 @@ class Model
         return $this->get_user($_chat_id);
     }
 
-    public function get_level(int $_id): array|false
+    public function get_level(int $_id)
     {
         $query = $this->db->prepare('SELECT * FROM levels WHERE id=:id');
         $query->bindValue(':id', $_id, SQLITE3_INTEGER);
@@ -93,7 +93,7 @@ class Model
         return false;
     }
 
-    public function next_level(string $_id, int $_level_id):bool
+    public function next_level(string $_id, int $_level_id): bool
     {
         $query = $this->db->prepare(
             'UPDATE users SET level_id=:level_id WHERE id=:id'
@@ -102,7 +102,5 @@ class Model
         $query->bindValue(':id', $_id, SQLITE3_TEXT);
 
         return (bool) $query->execute();
-        
     }
-
 }

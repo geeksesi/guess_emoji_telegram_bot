@@ -2,7 +2,7 @@
 
 class TelegraLib
 {
-    private static string $url;
+    private static $url;
 
     /**
      * set url parameter to use
@@ -22,7 +22,7 @@ class TelegraLib
      *
      * @return  array|bool                [return description]
      */
-    private static function execute(string $_method, array $_parameters): array|bool
+    private static function execute(string $_method, array $_parameters)
     {
         if (!isset(self::$url)) {
             self::init();
@@ -34,7 +34,9 @@ class TelegraLib
         if (!empty($_parameters)) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($_parameters));
         }
-        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'Content-Type:application/json',
+        ]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $result = curl_exec($curl);
@@ -51,7 +53,7 @@ class TelegraLib
         if (is_null($output)) {
             return false;
         }
-        return  $output;
+        return $output;
     }
 
     /**
@@ -62,14 +64,17 @@ class TelegraLib
      *
      * @return  array              [return description]
      */
-    public static function send_message(string $_text, string $_chat_id, array $_keyboard = []): array|bool
-    {
+    public static function send_message(
+        string $_text,
+        string $_chat_id,
+        array $_keyboard = []
+    ) {
         $parameters = [
-            "text" => $_text,
-            "chat_id" => $_chat_id
+            'text' => $_text,
+            'chat_id' => $_chat_id,
         ];
         if (!empty($_keyboard)) {
-            $parameters["reply_markup"] = $_keyboard;
+            $parameters['reply_markup'] = $_keyboard;
         }
         return self::execute('sendMessage', $parameters);
     }
@@ -82,15 +87,17 @@ class TelegraLib
      * @param boolean $_one_time
      * @return array
      */
-    public static function make_keyboard(array $_keyboard, bool $_resize = false, bool $_one_time = false): array
-    {
+    public static function make_keyboard(
+        array $_keyboard,
+        bool $_resize = false,
+        bool $_one_time = false
+    ): array {
         return [
-            "keyboard" => $_keyboard,
-            "resize_keyboard" => $_resize,
-            "one_time_keyboard" => $_one_time,
+            'keyboard' => $_keyboard,
+            'resize_keyboard' => $_resize,
+            'one_time_keyboard' => $_one_time,
         ];
     }
-
 
     /**
      * [get_update description]
@@ -99,16 +106,16 @@ class TelegraLib
      *
      * @return  array            [return description]
      */
-    public static function get_update(int $_offset = null): array|null
+    public static function get_update(int $_offset = null)
     {
         $parameters = [];
         if (!is_null($_offset)) {
-            $parameters["offset"] = $_offset;
+            $parameters['offset'] = $_offset;
         }
         $result = self::execute('getUpdates', $parameters);
-        if (!is_array($result)) {
+        if (!is_array($result) || !isset($result['result'])) {
             return false;
         }
-        return $result["result"];
+        return $result['result'];
     }
 }
