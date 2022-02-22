@@ -1,6 +1,8 @@
 <?php
 
-class TelegraLib
+namespace App;
+
+class TelegramLib
 {
     private static $url;
 
@@ -11,7 +13,7 @@ class TelegraLib
      */
     private static function init(): void
     {
-        self::$url = 'https://api.telegram.org/bot' . TOKEN . '/';
+        self::$url = 'https://api.telegram.org/bot' . $_ENV['TOKEN'] . '/';
     }
 
     /**

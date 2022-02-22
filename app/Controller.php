@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 class Controller
 {
     private $update;
@@ -34,13 +36,16 @@ class Controller
         $level = $this->model->get_level($this->user['level_id']);
 
         if (strtolower($_text) === $level['answer']) {
-            TelegraLib::send_message('تبریک شما برنده شدید 🥇', $this->chat_id);
+            TelegramLib::send_message(
+                'تبریک شما برنده شدید 🥇',
+                $this->chat_id
+            );
             $this->model->next_level($this->user['id'], $level['id'] + 1);
             $this->user = $this->model->get_user($this->chat_id);
 
             return;
         }
-        TelegraLib::send_message('لطفا دوباره تلاش کنید 🙁', $this->chat_id);
+        TelegramLib::send_message('لطفا دوباره تلاش کنید 🙁', $this->chat_id);
     }
 
     public function handle($update)
@@ -57,13 +62,13 @@ class Controller
 
     public function start_cmd()
     {
-        $keyboard = TelegraLib::make_keyboard([[['text' => 'دیدن سوال ']]]);
+        $keyboard = TelegramLib::make_keyboard([[['text' => 'دیدن سوال ']]]);
         $text = "
         سلام خوش آمدید به ربات بازی حدس ایموجی.\n
 
         برای دیدن سوال روی دکمه زیر کلیک کنید.
         ";
-        TelegraLib::send_message(
+        TelegramLib::send_message(
             $text,
             $this->update['message']['chat']['id'],
             $keyboard
@@ -73,7 +78,7 @@ class Controller
     public function question()
     {
         $level = $this->model->get_level($this->user['level_id']);
-        TelegraLib::send_message(
+        TelegramLib::send_message(
             $level['quest'],
             $this->update['message']['chat']['id']
         );

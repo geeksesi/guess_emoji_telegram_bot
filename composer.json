@@ -1,0 +1,17 @@
+{
+  "name": "geeksesi/guess_emoji_telegram_bot",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Mohammad Javad Ghasemy",
+      "email": "geeksesi@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.4"
+  }
+}

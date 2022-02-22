@@ -1,4 +1,7 @@
 <?php
+namespace App;
+
+use SQLite3;
 
 class Model
 {
@@ -76,7 +79,7 @@ class Model
             return $row;
         }
         if (!$this->add_user($_chat_id)) {
-            throw new Exception("Can't create user");
+            throw new \Exception("Can't create user");
         }
         return $this->get_user($_chat_id);
     }

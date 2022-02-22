@@ -1,4 +1,6 @@
 env.php
+.env
 node_modules/
 packag*.json
 *.sqlite
+vendor/

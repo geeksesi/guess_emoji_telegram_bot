@@ -2,12 +2,14 @@
 error_reporting(-1);
 ini_set('display_errors', 1);
 
-include __DIR__ . '/env.php';
-include __DIR__ . '/TelegramLib.php';
-include __DIR__ . '/Model.php';
-include __DIR__ . '/Controller.php';
+include __DIR__ . '/vendor/autoload.php';
+use App\Controller;
+use App\TelegramLib;
 
-$updates = TelegraLib::get_update();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+
+$updates = TelegramLib::get_update();
 
 $last_message_id = 0;
 foreach ($updates as $update) {
@@ -17,4 +19,4 @@ foreach ($updates as $update) {
 
     $last_message_id = $update['update_id'];
 }
-$updates = TelegraLib::get_update($last_message_id + 1);
+$updates = TelegramLib::get_update($last_message_id + 1);
