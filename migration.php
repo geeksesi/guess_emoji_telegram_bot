@@ -2,7 +2,11 @@
 error_reporting(-1);
 ini_set('display_errors', 1);
 
-include __DIR__ . '/Model.php';
+include __DIR__ . '/vendor/autoload.php';
+use App\Model;
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 $model = new Model();
 
