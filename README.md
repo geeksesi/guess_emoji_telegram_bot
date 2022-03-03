@@ -19,6 +19,7 @@
 - [قسمت چهارم - شروع بازی - ساخت نمونه اولیه بازی](https://youtu.be/kX76gFpvHcA)
 - [قسمت پنجم - مراحل بیشتر -اتصال به دیتابیس sqlite](https://youtu.be/Q-V7lW96BOU)
 - [قسمت ششم - قرار دادن روی هاست و تنظیم وب هوک](https://youtu.be/ayb4h_n-lY4)
+- [قسمت هفتم - ریفکتور با کمپوزر autoload](https://www.youtube.com/watch?v=mW4KKFNEdMM&list=PL6MpbG5qSD2CsCPBVmVikS_eTCjRDwvzB&index=8)
 
 ## شبکه های اجتماعی
 
@@ -34,11 +35,16 @@
 while true; do php index.php; done
 ```
 
-# Todo
+## Webhook :
 
-- [ ] - [ادمین از طریق ربات بتواند مرحله اضافه کند]()
-- [ ] - [ادمین لیست کاربران و مراحل را ببنید]()
-- [ ] - [سیستم امتیاز داشته باشیم به ازای حل هر مرحله]()
-- [ ] - [اضافه کردن قابلیت راهنمایی بابت هر سوال و کسر امتیار]()
-- [ ] - [اضافه کردن سیستم کسب امتیاز بر اساس معرفی]()
-- [ ] - [اضافه کردن سیستم فروش امتیاز :)]()
+- get info :
+
+```
+https://api.telegram.org/botTOKEN/getWebhookInfo
+```
+
+- set Webhook
+
+```
+https://api.telegram.org/botTOKEN/setWebhook?url=URL
+```
