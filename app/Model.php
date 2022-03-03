@@ -9,21 +9,15 @@ class Model
 
     public function __construct()
     {
-        $this->db = new SQLite3(__DIR__ . '/../database.sqlite');
-    }
-
-    public function make_levels_table()
-    {
-        $this->db->query(
-            'CREATE TABLE levels (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, quest TEXT UNIQUE NOT NULL, answer TEXT NOT NULL)'
-        );
-    }
-
-    public function make_users_table()
-    {
-        $this->db->query(
-            'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, chat_id TEXT UNIQUE NOT NULL, level_id TEXT NOT NULL)'
-        );
+        try {
+            $this->db = new \PDO(
+                "mysql:host={$_ENV['MYSQL_HOST']}:{$_ENV['MYSQL_PORT']};dbname={$_ENV['MYSQL_DB']}",
+                $_ENV['MYSQL_USERNAME'],
+                $_ENV['MYSQL_PASSWORD']
+            );
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function add_level(string $_question, string $_answer): bool
@@ -31,8 +25,10 @@ class Model
         $query = $this->db->prepare(
             'INSERT INTO levels (quest,answer) VALUES (:quest, :answer)'
         );
-        $query->bindValue(':quest', $_question, SQLITE3_TEXT);
-        $query->bindValue(':answer', strtolower($_answer), SQLITE3_TEXT);
+        $query->bindParam(':quest', $_question);
+        $query->bindParam(':answer', strtolower($_answer));
+        $query->bindParam(':answer', strtolower($_answer));
+        $query->bindParam(':answer', strtolower($_answer));
 
         return (bool) $query->execute();
     }
@@ -40,10 +36,14 @@ class Model
     public function get_first_level_id(): int
     {
         $query = $this->db->query(
-            'SELECT * FROM levels order by id asc limit 1'
+            'SELECT * FROM levels order by orders asc limit 1',
+            \PDO::FETCH_ASSOC
         );
-        $row = $query->fetchArray(SQLITE3_ASSOC);
-        return $row['id'];
+        $row = $query->fetchAll()[0] ?? null;
+        if (is_array($row)) {
+            return $row['id'];
+        }
+        return 0;
     }
 
     public function add_user(string $_chat_id): bool
@@ -52,17 +52,17 @@ class Model
         $query = $this->db->prepare(
             'INSERT INTO users (chat_id, level_id) VALUES (:chat_id, :level_id)'
         );
-        $query->bindValue(':chat_id', $_chat_id, SQLITE3_TEXT);
-        $query->bindValue(':level_id', $level_id, SQLITE3_INTEGER);
+        $query->bindParam(':chat_id', $_chat_id);
+        $query->bindParam(':level_id', $level_id);
 
         return (bool) $query->execute();
     }
 
     public function levels(): array
     {
-        $query = $this->db->query('SELECT * FROM levels');
+        $query = $this->db->query('SELECT * FROM levels', \PDO::FETCH_ASSOC);
         $output = [];
-        while ($row = $query->fetchArray(SQLITE3_ASSOC)) {
+        while ($row = $query->fetchAll()) {
             $output[] = $row;
         }
         return $output;
@@ -73,9 +73,11 @@ class Model
         $query = $this->db->prepare(
             'SELECT * FROM users WHERE chat_id=:chat_id'
         );
-        $query->bindValue(':chat_id', $_chat_id, SQLITE3_TEXT);
-        $result = $query->execute();
-        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $query->bindParam(':chat_id', $_chat_id);
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
+        $row = $query->fetchAll()[0] ?? null;
+        if (is_array($row)) {
             return $row;
         }
         if (!$this->add_user($_chat_id)) {
@@ -87,10 +89,13 @@ class Model
     public function get_level(int $_id)
     {
         $query = $this->db->prepare('SELECT * FROM levels WHERE id=:id');
-        $query->bindValue(':id', $_id, SQLITE3_INTEGER);
+        $query->bindParam(':id', $_id);
 
-        $result = $query->execute();
-        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $row = $query->fetchAll() ?? null;
+        if (is_array($row)) {
             return $row;
         }
         return false;
@@ -101,9 +106,9 @@ class Model
         $query = $this->db->prepare(
             'UPDATE users SET level_id=:level_id WHERE id=:id'
         );
-        $query->bindValue(':level_id', $_level_id, SQLITE3_INTEGER);
-        $query->bindValue(':id', $_id, SQLITE3_TEXT);
+        $query->bindParam(':level_id', $_level_id);
+        $query->bindParam(':id', $_id);
 
-        return (bool) $query->execute();
+        return $query->execute();
     }
 }
