@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Helper;
 
-class TelegramLib
+class TelegramHelper
 {
     private static $url;
 
@@ -36,9 +36,7 @@ class TelegramLib
         if (!empty($_parameters)) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($_parameters));
         }
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            'Content-Type:application/json',
-        ]);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $result = curl_exec($curl);
@@ -66,11 +64,8 @@ class TelegramLib
      *
      * @return  array              [return description]
      */
-    public static function send_message(
-        string $_text,
-        string $_chat_id,
-        array $_keyboard = []
-    ) {
+    public static function send_message(string $_text, string $_chat_id, array $_keyboard = [])
+    {
         $parameters = [
             'text' => $_text,
             'chat_id' => $_chat_id,
@@ -89,11 +84,8 @@ class TelegramLib
      * @param boolean $_one_time
      * @return array
      */
-    public static function make_keyboard(
-        array $_keyboard,
-        bool $_resize = false,
-        bool $_one_time = false
-    ): array {
+    public static function make_keyboard(array $_keyboard, bool $_resize = false, bool $_one_time = false): array
+    {
         return [
             'keyboard' => $_keyboard,
             'resize_keyboard' => $_resize,
