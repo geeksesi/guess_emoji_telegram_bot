@@ -9,4 +9,12 @@ final class Level extends Model
     public function __construct()
     {
     }
+
+    public function check_level(string $text): bool
+    {
+        if ($text == $this->answer) {
+            return true;
+        }
+        return false;
+    }
 }
