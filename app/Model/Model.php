@@ -113,6 +113,27 @@ abstract class Model
         return $query->fetchAll(PDO::FETCH_CLASS, static::class);
     }
 
+    public static function get_all(
+        string $_where = '',
+        array $_params = [],
+        string $_order = 'order by id asc',
+
+    ) {
+        $table = static::$table;
+        $db = self::connection();
+
+
+        $query = $db->prepare("SELECT * from {$table} {$_where} {$_order}");
+        foreach ($_params as $key => $value) {
+            $query->bindParam($key, $value);
+        }
+
+        if (!$query->execute()) {
+            return false;
+        }
+        return $query->fetchAll(PDO::FETCH_CLASS, static::class);
+    }
+
     public static function find(int $_id)
     {
         $table = static::$table;
@@ -135,5 +156,15 @@ abstract class Model
         $query = $db->prepare("DELETE FROM {$table} WHERE id=:id LIMIT 1");
 
         return $query->execute(["id" => $_id]);
+    }
+
+    public static function delete_query(string $_where = '', array $_params = [])
+    {
+        $table = static::$table;
+        $db = self::connection();
+
+        $query = $db->prepare("DELETE FROM {$table} {$_where}");
+
+        return $query->execute($_params);
     }
 }
