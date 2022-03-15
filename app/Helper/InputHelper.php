@@ -2,60 +2,113 @@
 
 namespace App\Helper;
 
+use App\Controller\Admin\AddLevelController;
 use App\Controller\Command\StartCommandController;
+use App\Controller\Keyboard\GameStartKeyboardController;
 
 class InputHelper
 {
-    public static function handle(array $_update)
+    private $update;
+
+    public function __construct(array $update)
     {
-        switch ($_update["message"]["chat"]["type"]) {
+        // sanitize frequent access variable
+        if (isset($update["message"]["text"])) {
+            $update["message"]["text"] = htmlspecialchars($update["message"]["text"]);
+        }
+        $this->update = $update;
+    }
+
+    public function __invoke()
+    {
+        switch ($this->update["message"]["chat"]["type"]) {
             case "private":
-                return self::private($_update);
+                return $this->private();
                 break;
             case "group":
             case "supergroup":
-                return self::group($_update);
+                return $this->group();
                 break;
         }
     }
 
-    private static function private(array $_update)
+    private function private()
     {
-        if (isset($_update["message"]["text"])) {
-            return self::text($_update);
+        if (isset($this->update["message"]["text"])) {
+            return $this->text();
         }
         return null;
     }
 
     // has not yet any plan to work on groups
-    private static function group(array $_update)
+    private function group()
     {
         return null;
     }
 
-    private static function text(array $_update)
+    private function text()
     {
-        if (isset($_update["message"]["entities"])) {
-            foreach ($_update["message"]["entities"] as $entity) {
+        if (isset($this->update["message"]["entities"])) {
+            foreach ($this->update["message"]["entities"] ?? [] as $entity) {
                 if ($entity["type"] === "bot_command") {
-                    return self::native_commands($_update);
+                    return $this->native_commands();
                 }
             }
         }
+        if ($reply_keyboard = $this->reply_keyboard()) {
+            return $reply_keyboard;
+        }
+        if ($admin = $this->admin()) {
+            return $admin;
+        }
     }
 
-    private static function native_commands(array $_update)
+    private function native_commands()
     {
-        TelegramHelper::send_message("YOU SEND  : " . $_update["message"]["text"], $_update["message"]["chat"]["id"]);
-
-        switch ($_update["message"]["text"]) {
-            case '/start':
-                return (new StartCommandController())($_update);
+        switch ($this->update["message"]["text"]) {
+            case "/start":
+                return (new StartCommandController())($this->update);
                 break;
 
             default:
                 return null;
                 break;
         }
+    }
+
+    private function reply_keyboard()
+    {
+        switch ($this->update["message"]["text"]) {
+            case "شروع بازی":
+                return (new GameStartKeyboardController())($this->update);
+                break;
+
+            default:
+                return false;
+                break;
+        }
+    }
+
+    private function admin()
+    {
+        if ($this->update["message"]["text"][0] != "!") {
+            return false;
+        }
+        // check admin here.
+        $command = substr($this->update["message"]["text"], 0, 10);
+        switch ($command) {
+            case "!aNewLevel":
+                return (new AddLevelController())($this->update);
+                break;
+
+            default:
+                return false;
+                break;
+        }
+    }
+
+    private function game()
+    {
+        # code...
     }
 }
