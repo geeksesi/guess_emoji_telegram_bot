@@ -3,13 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Controller\Controller;
+use App\Helper\TelegramHelper;
 
 class AddLevelController extends Controller
 {
-    private $update;
-
-    public function __invoke(array $update)
+    public function __invoke()
     {
-        $this->update = $update;
+        TelegramHelper::send_message("HELLOa", $this->update["message"]["chat"]["id"]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use App\Controller\Admin\AddLevelController;
 use App\Controller\Command\StartCommandController;
+use App\Controller\Game\GameController;
 use App\Controller\Keyboard\GameStartKeyboardController;
 
 class InputHelper
@@ -61,13 +62,14 @@ class InputHelper
         if ($admin = $this->admin()) {
             return $admin;
         }
+        return $this->game();
     }
 
     private function native_commands()
     {
         switch ($this->update["message"]["text"]) {
             case "/start":
-                return (new StartCommandController())($this->update);
+                return (new StartCommandController($this->update))();
                 break;
 
             default:
@@ -80,7 +82,7 @@ class InputHelper
     {
         switch ($this->update["message"]["text"]) {
             case "شروع بازی":
-                return (new GameStartKeyboardController())($this->update);
+                return (new GameStartKeyboardController($this->update))();
                 break;
 
             default:
@@ -95,10 +97,13 @@ class InputHelper
             return false;
         }
         // check admin here.
+        if ($this->update["message"]["chat"]["id"] != $_ENV["ADMIN"]) {
+            return false;
+        }
         $command = substr($this->update["message"]["text"], 0, 10);
         switch ($command) {
             case "!aNewLevel":
-                return (new AddLevelController())($this->update);
+                return (new AddLevelController($this->update))();
                 break;
 
             default:
@@ -109,6 +114,6 @@ class InputHelper
 
     private function game()
     {
-        # code...
+        return (new GameController($this->update))();
     }
 }

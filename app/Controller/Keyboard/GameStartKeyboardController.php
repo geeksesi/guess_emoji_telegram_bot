@@ -6,10 +6,7 @@ use App\Controller\Controller;
 
 class GameStartKeyboardController extends Controller
 {
-    private $update;
-
-    public function __invoke(array $update)
+    public function __invoke()
     {
-        $this->update = $update;
     }
 }

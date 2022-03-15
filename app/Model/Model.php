@@ -16,9 +16,9 @@ abstract class Model
         }
         try {
             self::$db = new \PDO(
-                "mysql:host={$_ENV['MYSQL_HOST']}:{$_ENV['MYSQL_PORT']};dbname={$_ENV['MYSQL_DB']}",
-                $_ENV['MYSQL_USERNAME'],
-                $_ENV['MYSQL_PASSWORD']
+                "mysql:host={$_ENV["MYSQL_HOST"]}:{$_ENV["MYSQL_PORT"]};dbname={$_ENV["MYSQL_DB"]}",
+                $_ENV["MYSQL_USERNAME"],
+                $_ENV["MYSQL_PASSWORD"]
             );
         } catch (\Throwable $th) {
             throw $th;
@@ -31,18 +31,18 @@ abstract class Model
         $table = static::$table;
         $db = self::connection();
 
-        $keys = '';
-        $bind_keys = '';
+        $keys = "";
+        $bind_keys = "";
         $bind_params = [];
         foreach ($parameter as $key => $value) {
             if (in_array($key, static::$fields, true)) {
-                $keys .= $key . ',';
-                $bind_keys .= ':' . $key . ',';
+                $keys .= $key . ",";
+                $bind_keys .= ":" . $key . ",";
                 $bind_params[$key] = $value;
             }
         }
-        $keys = rtrim($keys, ',');
-        $bind_keys = rtrim($bind_keys, ',');
+        $keys = rtrim($keys, ",");
+        $bind_keys = rtrim($bind_keys, ",");
 
         $query = $db->prepare("INSERT INTO {$table} ({$keys}) VALUES ({$bind_keys})");
 
@@ -54,25 +54,25 @@ abstract class Model
         $table = static::$table;
         $db = self::connection();
 
-        $states = '';
+        $states = "";
         $bind_params = [
             "id" => $_id,
         ];
         foreach ($parameter as $key => $value) {
             if (in_array($key, static::$fields, true)) {
                 $states .= $key . "=:" . $key;
-                $states .= ', ';
+                $states .= ", ";
                 $bind_params[$key] = $value;
             }
         }
-        rtrim($states, ', ');
+        rtrim($states, ", ");
 
         $query = $db->prepare("UPDATE {$table} SET {$states} WHERE id=:id ");
 
         return (bool) $query->execute($bind_params);
     }
 
-    public static function get_first(string $_where = '', array $_params = [], string $_order = 'order by id asc')
+    public static function get_first(string $_where = "", array $_params = [], string $_order = "order by id asc")
     {
         $table = static::$table;
         $db = self::connection();
@@ -87,12 +87,12 @@ abstract class Model
     }
 
     public static function get_paginate(
-        string $_where = '',
+        string $_where = "",
         array $_params = [],
-        string $_order = 'order by id asc',
+        string $_order = "order by id asc",
         int $_page = 1,
         int $_per_page = 15
-    ) {
+    ): array {
         $table = static::$table;
         $db = self::connection();
 
@@ -113,15 +113,10 @@ abstract class Model
         return $query->fetchAll(PDO::FETCH_CLASS, static::class);
     }
 
-    public static function get_all(
-        string $_where = '',
-        array $_params = [],
-        string $_order = 'order by id asc',
-
-    ) {
+    public static function get_all(string $_where = "", array $_params = [], string $_order = "order by id asc")
+    {
         $table = static::$table;
         $db = self::connection();
-
 
         $query = $db->prepare("SELECT * from {$table} {$_where} {$_order}");
         foreach ($_params as $key => $value) {
@@ -158,7 +153,7 @@ abstract class Model
         return $query->execute(["id" => $_id]);
     }
 
-    public static function delete_query(string $_where = '', array $_params = [])
+    public static function delete_query(string $_where = "", array $_params = [])
     {
         $table = static::$table;
         $db = self::connection();
