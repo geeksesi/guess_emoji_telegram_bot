@@ -14,7 +14,7 @@ $dotenv->safeLoad();
 $updates = TelegramHelper::get_update();
 
 $last_message_id = 0;
-foreach ($updates as $update) {
+foreach ($updates ?? [] as $update) {
     (new InputHelper($update))();
 
     $last_message_id = $update["update_id"];
