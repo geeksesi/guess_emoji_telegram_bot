@@ -1,12 +1,12 @@
 <?php
 namespace App\Model;
 
-use OutputMessageEnum;
+use App\Enums\OutputMessageEnum;
 
 final class OutputMessage extends Model
 {
-    protected static $table = 'levels';
-    protected static $fields = ['id', 'text', 'type', 'created_at'];
+    protected static $table = "levels";
+    protected static $fields = ["id", "text", "type", "created_at"];
 
     public function __construct()
     {

@@ -2,8 +2,8 @@
 
 namespace App\Helper;
 
+use App\Enums\OutputMessageEnum;
 use App\Model\OutputMessage;
-use OutputMessageEnum;
 
 class OutputHelper
 {
