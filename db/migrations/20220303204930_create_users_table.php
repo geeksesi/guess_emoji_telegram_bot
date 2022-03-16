@@ -18,21 +18,21 @@ final class CreateUsersTable extends AbstractMigration
      */
     public function change(): void
     {
-        $users = $this->table('users');
+        $users = $this->table("users");
         $users
-            ->addColumn('chat_id', 'string', [
-                'limit' => 200,
-                'null' => false,
+            ->addColumn("chat_id", "string", [
+                "limit" => 200,
+                "null" => false,
             ])
-            ->addColumn('credit', 'integer', ['default' => 0])
-            ->addColumn('level_id', 'integer')
-            ->addColumn('created_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("credit", "integer", ["default" => 0])
+            ->addColumn("level", "integer")
+            ->addColumn("created_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
-            ->addColumn('updated_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("updated_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
-            ->addIndex(['chat_id'], ['unique' => true])
+            ->addIndex(["chat_id"], ["unique" => true])
             ->create();
     }
 }
