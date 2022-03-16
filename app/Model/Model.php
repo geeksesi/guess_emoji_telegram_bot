@@ -49,7 +49,7 @@ abstract class Model
         $bind_keys = rtrim($bind_keys, ",");
 
         // var_dump($keys, $bind_keys, $bind_params);
-        die();
+        // die();
         $query = $db->prepare("INSERT INTO {$table} ({$keys}) VALUES ({$bind_keys})");
         if (!$query->execute($bind_params)) {
             throw new \Exception("Cannot Store model : " . get_class(), 1);
@@ -160,6 +160,19 @@ abstract class Model
         $query = $db->prepare("DELETE FROM {$table} WHERE id=:id LIMIT 1");
 
         return $query->execute(["id" => $_id]);
+    }
+
+    public function destroy()
+    {
+        if (!isset($this->id)) {
+            throw new \Exception("THERE NO RECORD ON DB", 1);
+        }
+        $table = static::$table;
+        $db = self::connection();
+
+        $query = $db->prepare("DELETE FROM {$table} WHERE id=:id LIMIT 1");
+
+        return $query->execute(["id" => $this->id]);
     }
 
     public static function delete_query(string $_where = "", array $_params = [])
