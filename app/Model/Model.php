@@ -18,7 +18,11 @@ abstract class Model
             self::$db = new \PDO(
                 "mysql:host={$_ENV["MYSQL_HOST"]}:{$_ENV["MYSQL_PORT"]};dbname={$_ENV["MYSQL_DB"]}",
                 $_ENV["MYSQL_USERNAME"],
-                $_ENV["MYSQL_PASSWORD"]
+                $_ENV["MYSQL_PASSWORD"],
+                [
+                    "charset" => "utf8mb4",
+                    "collation" => "utf8_unicode_ci",
+                ]
             );
         } catch (\Throwable $th) {
             throw $th;
@@ -26,7 +30,7 @@ abstract class Model
         return self::$db;
     }
 
-    public static function create(array $parameter): bool
+    public static function create(array $parameter)
     {
         $table = static::$table;
         $db = self::connection();
@@ -44,9 +48,14 @@ abstract class Model
         $keys = rtrim($keys, ",");
         $bind_keys = rtrim($bind_keys, ",");
 
+        // var_dump($keys, $bind_keys, $bind_params);
+        die();
         $query = $db->prepare("INSERT INTO {$table} ({$keys}) VALUES ({$bind_keys})");
-
-        return $query->execute($bind_params);
+        if (!$query->execute($bind_params)) {
+            throw new \Exception("Cannot Store model : " . get_class(), 1);
+        }
+        $id = $db->lastInsertId();
+        return self::find($id);
     }
 
     public static function update(array $parameter, int $_id): bool
