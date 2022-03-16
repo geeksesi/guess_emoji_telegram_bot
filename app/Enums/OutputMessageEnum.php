@@ -1,4 +1,6 @@
 <?php
+namespace App\Enums;
+
 enum OutputMessageEnum: int
 {
     case LEVEL_WIN = 1;

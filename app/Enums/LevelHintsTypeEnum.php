@@ -1,4 +1,6 @@
 <?php
+namespace App\Enums;
+
 enum LevelHintsTypeEnum: int
 {
     case AUTO_GENERATE = 1;
