@@ -4,7 +4,7 @@ namespace App\Model;
 final class User extends Model
 {
     protected static $table = "users";
-    protected static $fields = ["id", "chat_id", "credit", "level_id", "created_at", "updated_at"];
+    protected static $fields = ["id", "chat_id", "credit", "level", "created_at", "updated_at"];
 
     public function __construct()
     {
@@ -19,11 +19,11 @@ final class User extends Model
     {
         $user = self::get_first("WHERE chat_id=:chat_id", ["chat_id" => $_chat_id]);
         if (!$user || empty($user)) {
-            $level_id = Level::get_first("", [], "ORDER BY orders asc")->id ?? 0;
+            $level_id = Level::get_first("", [], "ORDER BY orders asc")->order ?? 0;
             self::create([
                 "chat_id" => $_chat_id,
                 "credit" => $_ENV["DEFAULT_CREDIT"],
-                "level_id" => $level_id,
+                "level" => $level_id,
             ]);
             $user = self::get_first("WHERE chat_id=:chat_id", ["chat_id" => $_chat_id]);
         }
