@@ -31,14 +31,12 @@ class AddLevelController extends Controller
             return;
         }
 
-        $question = $sections[0] ?? $this->error("Unvalid quest");
-        $answer = $sections[1] ?? $this->error("Unvalid answer");
+        $question = trim($sections[0]) ?? $this->error("Unvalid quest");
+        $answer = trim($sections[1]) ?? $this->error("Unvalid answer");
         $order = (int) $sections[2] ?? Level::get_last_order();
 
         $level = Level::create(["quest" => $question, "answer" => $answer, "orders" => $order]);
-        $auto_hints = LevelHintsHelper::generate($level);
-
-        TelegramHelper::send_message($line, json_encode($level, JSON_UNESCAPED_UNICODE & JSON_PRETTY_PRINT));
-        TelegramHelper::send_message($line, json_encode($auto_hints, JSON_UNESCAPED_UNICODE & JSON_PRETTY_PRINT));
+        // $auto_hints = LevelHintsHelper::generate($level);
+        TelegramHelper::send_message("مرحله جدید : " . $level->quest . " :: " . $level->answer, $this->chat_id);
     }
 }
