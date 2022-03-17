@@ -22,6 +22,15 @@ class InputHelper
 
     public function __invoke()
     {
+        try {
+            $this->run();
+        } catch (\Throwable $th) {
+            return (new ExceptionHepler($th))();
+        }
+    }
+
+    public function run()
+    {
         switch ($this->update["message"]["chat"]["type"]) {
             case "private":
                 return $this->private();
@@ -32,7 +41,6 @@ class InputHelper
                 break;
         }
     }
-
     private function private()
     {
         if (isset($this->update["message"]["text"])) {
