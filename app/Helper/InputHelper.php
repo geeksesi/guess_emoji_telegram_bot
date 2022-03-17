@@ -3,6 +3,7 @@
 namespace App\Helper;
 
 use App\Controller\Admin\AddLevelController;
+use App\Controller\Admin\ListLevelsController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
 use App\Controller\Keyboard\GameStartKeyboardController;
@@ -112,6 +113,9 @@ class InputHelper
         switch ($command) {
             case "!aNewLevel":
                 return (new AddLevelController($this->update))();
+                break;
+            case "!listLevel":
+                return (new ListLevelsController($this->update))();
                 break;
 
             default:
