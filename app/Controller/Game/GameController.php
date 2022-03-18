@@ -10,12 +10,14 @@ class GameController extends Controller
 {
     public function __invoke()
     {
+        $this->run_game($this->update["message"]["text"]);
     }
 
     public function run_game($_text)
     {
-        $level = User::get_first($this->chat_id)->level();
-
+        $level = User::get_first("WHERE chat_id=:chat_id", ["chat_id" => $this->chat_id])->level();
+        // var_dump($level);
+        // die();
         if ($level->check_level($_text)) {
             TelegramHelper::send_message("تبریک شما برنده شدید 🥇", $this->chat_id);
             $this->model->next_level($this->user["id"], $level["id"] + 1);
@@ -24,17 +26,6 @@ class GameController extends Controller
             return;
         }
         TelegramHelper::send_message("لطفا دوباره تلاش کنید 🙁", $this->chat_id);
-    }
-
-    public function start_cmd()
-    {
-        $keyboard = TelegramHelper::make_keyboard([[["text" => "دیدن سوال "]]]);
-        $text = "
-        سلام خوش آمدید به ربات بازی حدس ایموجی.\n
-
-        برای دیدن سوال روی دکمه زیر کلیک کنید.
-        ";
-        TelegramHelper::send_message($text, $this->update["message"]["chat"]["id"], $keyboard);
     }
 
     public function question()
