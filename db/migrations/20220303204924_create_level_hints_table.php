@@ -18,20 +18,20 @@ final class CreateLevelHintsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('level_hints');
+        $table = $this->table("level_hints", ["collation" => "utf8mb4_unicode_ci"]);
         $table
-            ->addColumn('hint', 'text', ['null' => false])
-            ->addColumn('order', 'integer', ['default' => 0])
-            ->addColumn('level_id', 'integer')
-            ->addForeignKey('level_id', 'levels', 'id', [
-                'delete' => 'CASCADE',
-                'update' => 'NO_ACTION',
+            ->addColumn("hint", "text", ["null" => false])
+            ->addColumn("order", "integer", ["default" => 0])
+            ->addColumn("level_id", "integer")
+            ->addForeignKey("level_id", "levels", "id", [
+                "delete" => "CASCADE",
+                "update" => "NO_ACTION",
             ])
-            ->addColumn('created_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("created_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
-            ->addColumn('updated_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("updated_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
             ->create();
     }

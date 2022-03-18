@@ -18,12 +18,12 @@ final class CreateOutputMessagesTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('output_messages');
+        $table = $this->table("output_messages", ["collation" => "utf8mb4_unicode_ci"]);
         $table
-            ->addColumn('text', 'text')
-            ->addColumn('type', 'integer')
-            ->addColumn('created_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("text", "text")
+            ->addColumn("type", "integer")
+            ->addColumn("created_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
             ->create();
     }

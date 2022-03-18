@@ -18,22 +18,22 @@ final class CreateLevelsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('levels');
+        $table = $this->table("levels", ["collation" => "utf8mb4_unicode_ci"]);
         $table
-            ->addColumn('quest', 'string', [
-                'limit' => 100,
-                'null' => false,
+            ->addColumn("quest", "string", [
+                "limit" => 100,
+                "null" => false,
             ])
-            ->addColumn('answer', 'string', ['limit' => 500, 'null' => false])
-            ->addColumn('order', 'integer', ['default' => 0])
-            ->addColumn('difficulty', 'integer', ['default' => 1])
-            ->addColumn('created_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("answer", "string", ["limit" => 500, "null" => false])
+            ->addColumn("order", "integer", ["default" => 0])
+            ->addColumn("difficulty", "integer", ["default" => 1])
+            ->addColumn("created_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
-            ->addColumn('updated_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("updated_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
-            ->addIndex(['quest'], ['unique' => true])
+            ->addIndex(["quest"], ["unique" => true])
             ->create();
     }
 }

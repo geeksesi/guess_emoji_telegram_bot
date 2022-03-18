@@ -18,13 +18,13 @@ final class CreateMessagesTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('messages');
+        $table = $this->table("messages", ["collation" => "utf8mb4_unicode_ci"]);
         $table
-            ->addColumn('chat_id', 'string', ['limit' => 200])
-            ->addColumn('message', 'text')
-            ->addColumn('type', 'text')
-            ->addColumn('created_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("chat_id", "string", ["limit" => 200])
+            ->addColumn("message", "text")
+            ->addColumn("type", "text")
+            ->addColumn("created_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
             ->create();
     }
