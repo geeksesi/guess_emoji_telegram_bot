@@ -1,10 +1,18 @@
 <?php
 namespace App\Model;
 
+use PDO;
+
 final class Transaction extends Model
 {
-    protected static $table = 'users';
-    protected static $fields = ['id', 'balance', 'type', 'payment_id', 'created_at'];
+    protected static $table = "users";
+    protected static $fields = [
+        "id" => PDO::PARAM_INT,
+        "balance" => PDO::PARAM_INT,
+        "type" => PDO::PARAM_INT,
+        "payment_id" => PDO::PARAM_INT,
+        "created_at" => PDO::PARAM_STR,
+    ];
 
     public function __construct()
     {

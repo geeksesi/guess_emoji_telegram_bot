@@ -63,22 +63,32 @@ abstract class Model
         $table = static::$table;
         $db = self::connection();
 
-        $states = "";
+        $states = [];
         $bind_params = [
-            "id" => $_id,
+            // "id" => $_id,
         ];
         foreach ($parameter as $key => $value) {
+            if ($key === "updated_at") {
+                $states[] = $key . "=:" . $key;
+                $type = PDO::PARAM_STR;
+                $bind_params[$key] = ["value" => date("Y-m-d H:i:s"), "type" => $type];
+                continue;
+            }
             if (in_array($key, static::$fields, true)) {
-                $states .= $key . "=:" . $key;
-                $states .= ", ";
+                $states[] = $key . "=:" . $key;
                 $bind_params[$key] = $value;
             }
         }
-        rtrim($states, ", ");
+        $states = implode(", ", $states);
 
         $query = $db->prepare("UPDATE {$table} SET {$states} WHERE id=:id ");
-
-        return (bool) $query->execute($bind_params);
+        // var_dump($states, $bind_params);
+        // die();
+        $query->bindParam(":id", $_id, PDO::PARAM_INT);
+        foreach ($bind_params as $key => $value) {
+            $query->bindParam($key, $value["value"], $value["type"]);
+        }
+        return (bool) $query->execute();
     }
 
     public static function get_first(string $_where = "", array $_params = [], string $_order = "order by id asc")
@@ -162,6 +172,28 @@ abstract class Model
         return $query->execute(["id" => $_id]);
     }
 
+    public static function delete_query(string $_where = "", array $_params = [])
+    {
+        $table = static::$table;
+        $db = self::connection();
+
+        $query = $db->prepare("DELETE FROM {$table} {$_where}");
+
+        return $query->execute($_params);
+    }
+
+    public function save(): bool
+    {
+        $params = [];
+        foreach (static::$fields as $key => $type) {
+            if ($key === "id") {
+                continue;
+            }
+            $params[$key] = ["value" => $this->$key, "type" => $type];
+        }
+        return self::update($params, (int) $this->id);
+    }
+
     public function destroy()
     {
         if (!isset($this->id)) {
@@ -173,15 +205,5 @@ abstract class Model
         $query = $db->prepare("DELETE FROM {$table} WHERE id=:id LIMIT 1");
 
         return $query->execute(["id" => $this->id]);
-    }
-
-    public static function delete_query(string $_where = "", array $_params = [])
-    {
-        $table = static::$table;
-        $db = self::connection();
-
-        $query = $db->prepare("DELETE FROM {$table} {$_where}");
-
-        return $query->execute($_params);
     }
 }

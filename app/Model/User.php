@@ -1,10 +1,19 @@
 <?php
 namespace App\Model;
 
+use PDO;
+
 final class User extends Model
 {
     protected static $table = "users";
-    protected static $fields = ["id", "chat_id", "credit", "level", "created_at", "updated_at"];
+    protected static $fields = [
+        "id" => PDO::PARAM_INT,
+        "chat_id" => PDO::PARAM_STR,
+        "credit" => PDO::PARAM_INT,
+        "level" => PDO::PARAM_INT,
+        "created_at" => PDO::PARAM_STR,
+        "updated_at" => PDO::PARAM_STR,
+    ];
 
     public function __construct()
     {
@@ -12,7 +21,11 @@ final class User extends Model
 
     public function level()
     {
-        Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
+        if ($this->level === 0) {
+            $this->level = 1;
+            $this->save();
+        }
+        return Level::get_first("WHERE orders=:orders", ["orders" => $this->level]);
     }
 
     public static function get_or_create(string $_chat_id): self

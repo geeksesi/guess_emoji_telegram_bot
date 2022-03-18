@@ -1,10 +1,20 @@
 <?php
 namespace App\Model;
 
+use PDO;
+
 final class Level extends Model
 {
     protected static $table = "levels";
-    protected static $fields = ["id", "quest", "answer", "orders", "difficulty", "created_at", "updated_at"];
+    protected static $fields = [
+        "id" => PDO::PARAM_INT,
+        "quest" => PDO::PARAM_STR,
+        "answer" => PDO::PARAM_STR,
+        "orders" => PDO::PARAM_INT,
+        "difficulty" => PDO::PARAM_INT,
+        "created_at" => PDO::PARAM_STR,
+        "updated_at" => PDO::PARAM_STR,
+    ];
 
     public function __construct()
     {

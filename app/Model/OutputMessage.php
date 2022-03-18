@@ -2,11 +2,17 @@
 namespace App\Model;
 
 use App\Enums\OutputMessageEnum;
+use PDO;
 
 final class OutputMessage extends Model
 {
     protected static $table = "levels";
-    protected static $fields = ["id", "text", "type", "created_at"];
+    protected static $fields = [
+        "id" => PDO::PARAM_INT,
+        "text" => PDO::PARAM_STR,
+        "type" => PDO::PARAM_INT,
+        "created_at" => PDO::PARAM_STR,
+    ];
 
     public function __construct()
     {
