@@ -2,6 +2,7 @@
 /**
  * PLEASE RENAME THIS FILE. BECAUSE SECURITY ISSUES
  */
+die("YOU SHOULD NOT RUN THIS FILE. PLEASE AFTER COPY REMOVE THIS LINE");
 use App\Helper\InputHelper;
 
 error_reporting(-1);
