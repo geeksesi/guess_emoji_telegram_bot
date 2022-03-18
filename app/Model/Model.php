@@ -39,7 +39,7 @@ abstract class Model
         $bind_keys = "";
         $bind_params = [];
         foreach ($parameter as $key => $value) {
-            if (in_array($key, static::$fields, true)) {
+            if (in_array($key, array_keys(static::$fields), true)) {
                 $keys .= $key . ",";
                 $bind_keys .= ":" . $key . ",";
                 $bind_params[$key] = $value;
@@ -74,7 +74,7 @@ abstract class Model
                 $bind_params[$key] = ["value" => date("Y-m-d H:i:s"), "type" => $type];
                 continue;
             }
-            if (in_array($key, static::$fields, true)) {
+            if (in_array($key, array_keys(static::$fields), true)) {
                 $states[] = $key . "=:" . $key;
                 $bind_params[$key] = $value;
             }
