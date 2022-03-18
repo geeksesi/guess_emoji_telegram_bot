@@ -17,5 +17,3 @@ $input = file_get_contents("php://input");
 
 $update = json_decode($input, true);
 (new InputHelper($update))();
-
-include __DIR__ . "/vendor/autoload.php";
