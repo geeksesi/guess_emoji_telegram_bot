@@ -9,11 +9,6 @@ use App\Model\Level;
 
 class AddLevelController extends Controller
 {
-    public function error(string $_text)
-    {
-        TelegramHelper::send_message($_text, $this->chat_id);
-        return false;
-    }
     public function __invoke(): bool
     {
         $lines = explode("\n", $this->update["message"]["text"]);
@@ -32,8 +27,8 @@ class AddLevelController extends Controller
             return;
         }
 
-        $question = trim($sections[0]) ?? $this->error("Unvalid quest");
-        $answer = trim($sections[1]) ?? $this->error("Unvalid answer");
+        $question = trim($sections[0]) ?? throw new \Exception("Unvalid quest");
+        $answer = trim($sections[1]) ?? throw new \Exception("Unvalid answer");
         $order = (int) $sections[2] ?? Level::get_last_order();
 
         $level = Level::create(["quest" => $question, "answer" => $answer, "orders" => $order]);

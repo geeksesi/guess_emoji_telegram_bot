@@ -2,7 +2,10 @@
 
 namespace App\Helper;
 
+use App\Controller\Admin\AddHintController;
 use App\Controller\Admin\AddLevelController;
+use App\Controller\Admin\HelpController;
+use App\Controller\Admin\ListHintsController;
 use App\Controller\Admin\ListLevelsController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
@@ -111,11 +114,20 @@ class InputHelper
         }
         $command = substr($this->update["message"]["text"], 0, 10);
         switch ($command) {
+            case "!help":
+                return (new HelpController($this->update))();
+                break;
             case "!aNewLevel":
                 return (new AddLevelController($this->update))();
                 break;
+            case "!aNewHints":
+                return (new AddHintController($this->update))();
+                break;
             case "!listLevel":
                 return (new ListLevelsController($this->update))();
+                break;
+            case "!listHints":
+                return (new ListHintsController($this->update))();
                 break;
 
             default:

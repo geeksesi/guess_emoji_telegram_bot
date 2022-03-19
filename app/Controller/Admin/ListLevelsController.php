@@ -28,9 +28,10 @@ class ListLevelsController extends Controller
     public function single_level_output(Level $level)
     {
         $output = "مرحله : ";
-        $output .= $level->orders . " - ";
-        $output .= $level->quest . " ⬅️ ";
-        $output .= $level->answer . " 😵 ";
+        $output .= $level->id . " - ";
+        $output .= $level->orders . " :-: ";
+        $output .= $level->quest . " :: ";
+        $output .= $level->answer . " :: ";
         $output .= $level->difficulty . " \n ";
 
         return $output;
