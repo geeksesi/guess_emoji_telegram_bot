@@ -1,6 +1,8 @@
 <?php
 namespace App\Model;
 
+use App\Enums\OutputMessageEnum;
+use App\Helper\OutputHelper;
 use PDO;
 
 final class User extends Model
@@ -25,7 +27,12 @@ final class User extends Model
             $this->level = 1;
             $this->save();
         }
-        return Level::get_first("WHERE orders=:orders", ["orders" => $this->level]);
+        $level = Level::get_first("WHERE orders=:orders", ["orders" => $this->level]);
+        if ($level) {
+            return $level;
+        }
+        OutputHelper::by_type($this->chat_id, OutputMessageEnum::NO_MISSION);
+        return null;
     }
 
     public static function get_or_create(string $_chat_id): self
@@ -41,5 +48,17 @@ final class User extends Model
             $user = self::get_first("WHERE chat_id=:chat_id", ["chat_id" => $_chat_id]);
         }
         return $user;
+    }
+
+    public function next_level(): Level|bool
+    {
+        $this->level = $this->level + 1;
+        $this->save();
+        $level = $this->level();
+        if ($level) {
+            return $level;
+        }
+        OutputHelper::by_type($this->chat_id, OutputMessageEnum::FINISH_GAME);
+        return false;
     }
 }

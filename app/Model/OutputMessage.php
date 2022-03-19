@@ -6,7 +6,7 @@ use PDO;
 
 final class OutputMessage extends Model
 {
-    protected static $table = "levels";
+    protected static $table = "output_messages";
     protected static $fields = [
         "id" => PDO::PARAM_INT,
         "text" => PDO::PARAM_STR,
