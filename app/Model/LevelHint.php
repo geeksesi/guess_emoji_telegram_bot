@@ -20,8 +20,8 @@ final class LevelHint extends Model
     {
     }
 
-    public function level()
+    public function level(): Level
     {
-        Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
+        return Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
     }
 }
