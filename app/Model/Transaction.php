@@ -5,7 +5,7 @@ use PDO;
 
 final class Transaction extends Model
 {
-    protected static $table = "users";
+    protected static $table = "transactions";
     protected static $fields = [
         "id" => PDO::PARAM_INT,
         "balance" => PDO::PARAM_INT,

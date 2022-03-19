@@ -28,4 +28,10 @@ final class OutputMessage extends Model
             "ORDER BY id ASC"
         );
     }
+
+    public static function by_type(OutputMessageEnum $type)
+    {
+        $t = $type->value;
+        return self::get_first("WHERE type=:type", [":type" => $t], "ORDER BY id DESC");
+    }
 }

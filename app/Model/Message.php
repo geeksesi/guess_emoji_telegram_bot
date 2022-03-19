@@ -5,7 +5,7 @@ use PDO;
 
 final class Message extends Model
 {
-    protected static $table = "levels";
+    protected static $table = "messages";
     protected static $fields = [
         "id" => PDO::PARAM_INT,
         "chat_id" => PDO::PARAM_STR,
