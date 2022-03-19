@@ -9,7 +9,7 @@ use App\Model\Level;
 
 class ListLevelsController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): bool
     {
         $page = substr($this->update["message"]["text"], 11, 15) ?? 1;
         $page = empty($page) ? 1 : (int) $page;
@@ -22,6 +22,7 @@ class ListLevelsController extends Controller
         }
 
         TelegramHelper::send_message($text_out, $this->chat_id);
+        return true;
     }
 
     public function single_level_output(Level $level)

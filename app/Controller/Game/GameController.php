@@ -8,6 +8,8 @@ use App\Model\User;
 
 class GameController extends Controller
 {
+    private User $user;
+
     public function __invoke()
     {
         $this->run_game($this->update["message"]["text"]);
@@ -15,14 +17,11 @@ class GameController extends Controller
 
     public function run_game($_text)
     {
-        $level = User::get_first("WHERE chat_id=:chat_id", ["chat_id" => $this->chat_id])->level();
-        // var_dump($level);
-        // die();
+        $this->user = User::get_first("WHERE chat_id=:chat_id", ["chat_id" => $this->chat_id]);
+        $level = $this->user->level();
         if ($level->check_level($_text)) {
             TelegramHelper::send_message("تبریک شما برنده شدید 🥇", $this->chat_id);
-            $this->model->next_level($this->user["id"], $level["id"] + 1);
-            $this->user = $this->model->get_user($this->chat_id);
-
+            $this->user->next_level();
             return;
         }
         TelegramHelper::send_message("لطفا دوباره تلاش کنید 🙁", $this->chat_id);

@@ -6,7 +6,8 @@ use App\Controller\Controller;
 
 class GameStartKeyboardController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): bool
     {
+        return true;
     }
 }

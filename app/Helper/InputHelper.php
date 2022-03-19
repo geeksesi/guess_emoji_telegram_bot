@@ -122,6 +122,7 @@ class InputHelper
                 return false;
                 break;
         }
+        return false;
     }
 
     private function game()

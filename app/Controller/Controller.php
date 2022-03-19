@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Model\User;
 use App\TelegramHelper;
 
-class Controller
+abstract class Controller
 {
     protected array $update;
     protected string $chat_id;

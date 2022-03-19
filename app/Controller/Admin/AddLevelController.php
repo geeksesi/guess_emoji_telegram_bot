@@ -14,13 +14,14 @@ class AddLevelController extends Controller
         TelegramHelper::send_message($_text, $this->chat_id);
         return false;
     }
-    public function __invoke()
+    public function __invoke(): bool
     {
         $lines = explode("\n", $this->update["message"]["text"]);
 
         foreach ($lines as $line) {
             $this->handle_line($line);
         }
+        return true;
         // json_encode($this->update, JSON_PRETTY_PRINT)
     }
 
