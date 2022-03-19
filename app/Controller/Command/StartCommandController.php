@@ -9,7 +9,7 @@ class StartCommandController extends Controller
 {
     public function __invoke(): bool
     {
-        $keyboard = TelegramHelper::make_keyboard([[["text" => "دیدن سوال "]]]);
+        $keyboard = TelegramHelper::make_keyboard([[["text" => "شروع بازی"]]]);
         $text = "
         سلام خوش آمدید به ربات بازی حدس ایموجی.\n
 
