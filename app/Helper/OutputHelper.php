@@ -11,26 +11,41 @@ class OutputHelper
 {
     public static function win_level(User $_user)
     {
-        $message = OutputMessage::random(OutputMessageEnum::LEVEL_WIN);
-        TelegramHelper::send_message($message->text, $_user->chat_id);
-        self::level($_user->level(), $_user->chat_id);
+        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_WIN);
+        self::level($_user);
     }
 
     public static function lose_level(User $_user)
     {
-        $message = OutputMessage::random(OutputMessageEnum::LEVEL_LOSE);
-        TelegramHelper::send_message($message->text, $_user->chat_id);
-        self::level($_user->level(), $_user->chat_id);
+        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_LOSE);
+        self::level($_user);
     }
 
     public static function by_type(string $_chat_id, OutputMessageEnum $_type)
     {
         $message = OutputMessage::by_type($_type);
-        TelegramHelper::send_message($message->text, $_chat_id);
+        if (empty($message)) {
+            return;
+        }
+        $keyboard = KeyboardMakerHepler::by_type($_type);
+        TelegramHelper::send_message($message->text, $_chat_id, $keyboard);
     }
 
-    public static function level(Level $level, string $_chat_id)
+    public static function level(User $_user)
     {
-        TelegramHelper::send_message($level->quest, $_chat_id);
+        $keyboard = KeyboardMakerHepler::level($_user);
+        TelegramHelper::send_message($_user->level()->quest, $_user->chat_id, $keyboard);
+    }
+
+    public static function leader_board(string $_chat_id)
+    {
+        $keyboard = KeyboardMakerHepler::leader_board();
+        TelegramHelper::send_message("در دست احداث 👷 ", $_chat_id, $keyboard);
+    }
+
+    public static function free_credit(string $_chat_id)
+    {
+        $keyboard = KeyboardMakerHepler::free_credit();
+        TelegramHelper::send_message("در دست احداث 👷 ", $_chat_id, $keyboard);
     }
 }

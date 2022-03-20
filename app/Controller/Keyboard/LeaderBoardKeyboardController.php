@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controller\Command;
+namespace App\Controller\Keyboard;
 
 use App\Controller\Controller;
 use App\Enums\OutputMessageEnum;
-use App\Helper\KeyboardMakerHepler;
 use App\Helper\OutputHelper;
 use App\Helper\TelegramHelper;
 
-class StartCommandController extends Controller
+class LeaderBoardKeyboardController extends Controller
 {
     public function __invoke(): bool
     {
-        OutputHelper::by_type($this->chat_id, OutputMessageEnum::START_COMMAND);
+        TelegramHelper::send_message("در دست احداث", $this->chat_id);
+
         return true;
     }
 }

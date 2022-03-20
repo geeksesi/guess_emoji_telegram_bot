@@ -61,4 +61,9 @@ final class User extends Model
         OutputHelper::by_type($this->chat_id, OutputMessageEnum::FINISH_GAME);
         return false;
     }
+
+    public function hint_cost(): int
+    {
+        return 25;
+    }
 }

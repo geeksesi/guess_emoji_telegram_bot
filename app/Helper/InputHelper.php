@@ -11,7 +11,17 @@ use App\Controller\Admin\ListLevelsController;
 use App\Controller\Admin\ListOutputMessagesController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
+use App\Controller\Keyboard\AboutKeyboardController;
+use App\Controller\Keyboard\BuyCreditKeyboardController;
+use App\Controller\Keyboard\ContactKeyboardController;
+use App\Controller\Keyboard\FreeCreditKeyboardController;
+use App\Controller\Keyboard\GameContinueKeyboardController;
 use App\Controller\Keyboard\GameStartKeyboardController;
+use App\Controller\Keyboard\HintKeyboardController;
+use App\Controller\Keyboard\LeaderBoardKeyboardController;
+use App\Controller\Keyboard\SupportKeyboardController;
+use App\Controller\Keyboard\YourCreditKeyboardController;
+use App\Controller\Keyboard\YoutubeKeyboardController;
 
 class InputHelper
 {
@@ -97,6 +107,36 @@ class InputHelper
         switch ($this->update["message"]["text"]) {
             case "شروع بازی":
                 return (new GameStartKeyboardController($this->update))();
+                break;
+            case "💸 سکه رایگان":
+                return (new FreeCreditKeyboardController($this->update))();
+                break;
+            case "🥇 برترین ها":
+                return (new LeaderBoardKeyboardController($this->update))();
+                break;
+            case "❣️ ادامه بازی":
+                return (new GameContinueKeyboardController($this->update))();
+                break;
+            case "💳 خرید سکه":
+                return (new BuyCreditKeyboardController($this->update))();
+                break;
+            case "💵 سکه‌های شما‌ : ":
+                return (new YourCreditKeyboardController($this->update))();
+                break;
+            case "🎓 دوست داری یاد بگیری یه ربات مثل این بسازی ؟":
+                return (new YoutubeKeyboardController($this->update))();
+                break;
+            case "🖥 درباره ما":
+                return (new AboutKeyboardController($this->update))();
+                break;
+            case "📞 تماس با ما":
+                return (new ContactKeyboardController($this->update))();
+                break;
+            case "🪄 کمک می‌خوای ؟":
+                return (new HintKeyboardController($this->update))();
+                break;
+            case "😍 حمایت از ما":
+                return (new SupportKeyboardController($this->update))();
                 break;
 
             default:
