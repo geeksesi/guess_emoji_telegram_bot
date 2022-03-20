@@ -20,13 +20,21 @@ final class OutputMessage extends Model
 
     public static function random(OutputMessageEnum $type)
     {
-        $table = self::$table;
         $t = $type->value;
-        return self::get_first(
-            "WHERE id >= (SELECT FLOOR( MAX(id) * RAND()) FROM {$table} WHERE type=:type",
-            ["type" => $t],
-            "ORDER BY id ASC"
-        );
+
+        $table = static::$table;
+        $db = self::connection();
+
+        $ids_query = $db->prepare("SELECT id from {$table} WHERE type=:type");
+
+        if (!$ids_query->execute([":type" => $t])) {
+            throw new \Exception("Error on get " . $t . " ids for random", 500);
+        }
+        $ids_result = $ids_query->fetchAll(PDO::FETCH_ASSOC);
+        $ids = array_column($ids_result, "id");
+        $id = $ids[array_rand($ids)];
+
+        return self::find($id);
     }
 
     public static function by_type(OutputMessageEnum $type)
