@@ -4,9 +4,11 @@ namespace App\Helper;
 
 use App\Controller\Admin\AddHintController;
 use App\Controller\Admin\AddLevelController;
+use App\Controller\Admin\AddOutputMessageController;
 use App\Controller\Admin\HelpController;
 use App\Controller\Admin\ListHintsController;
 use App\Controller\Admin\ListLevelsController;
+use App\Controller\Admin\ListOutputMessagesController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
 use App\Controller\Keyboard\GameStartKeyboardController;
@@ -123,11 +125,17 @@ class InputHelper
             case "!aNewHints":
                 return (new AddHintController($this->update))();
                 break;
+            case "!aOuttexts":
+                return (new AddOutputMessageController($this->update))();
+                break;
             case "!listLevel":
                 return (new ListLevelsController($this->update))();
                 break;
             case "!listHints":
                 return (new ListHintsController($this->update))();
+                break;
+            case "!listOMesg":
+                return (new ListOutputMessagesController($this->update))();
                 break;
 
             default:

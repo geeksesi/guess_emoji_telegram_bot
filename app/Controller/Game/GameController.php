@@ -3,8 +3,8 @@
 namespace App\Controller\Game;
 
 use App\Controller\Controller;
+use App\Helper\OutputHelper;
 use App\Helper\TelegramHelper;
-use App\Model\User;
 
 class GameController extends Controller
 {
@@ -17,16 +17,10 @@ class GameController extends Controller
     {
         $level = $this->user->level();
         if ($level->check_level($_text)) {
-            TelegramHelper::send_message("تبریک شما برنده شدید 🥇", $this->chat_id);
             $this->user->next_level();
+            OutputHelper::win_level($this->user);
             return;
         }
-        TelegramHelper::send_message("لطفا دوباره تلاش کنید 🙁", $this->chat_id);
-    }
-
-    public function question()
-    {
-        $level = $this->model->get_level($this->user["level_id"]);
-        TelegramHelper::send_message($level["quest"], $this->update["message"]["chat"]["id"]);
+        OutputHelper::lose_level($this->user);
     }
 }
