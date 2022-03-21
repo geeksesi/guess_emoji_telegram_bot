@@ -49,10 +49,17 @@ class OutputHelper
         TelegramHelper::send_message("در دست احداث 👷 ", $_chat_id, $keyboard);
     }
 
-    public static function free_credit(string $_chat_id)
+    public static function free_credit(User $_user)
     {
         $keyboard = KeyboardMakerHepler::free_credit();
-        TelegramHelper::send_message("در دست احداث 👷 ", $_chat_id, $keyboard);
+        $message = "";
+        $message .= "این لینک رو برای دوستات بفرست، اونها رو به بازی دعوت کن و 80 تا سکه بگیر 🤩";
+        $message .= "\n";
+        $message .= "راستی دوستت هم 40 تا سکه بیشتر می گیره اول بازی. فقط به خاطر اینکه دوست شماست 😉";
+        $message .= "\n";
+        $message .= $_user->invite_link();
+
+        TelegramHelper::send_message($message, $_user->chat_id, $keyboard);
     }
 
     public static function low_credit(string $_chat_id)
