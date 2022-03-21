@@ -19,17 +19,22 @@ class GameController extends Controller
     public function run_game($_text)
     {
         $level = $this->user->level();
+        if (!$level) {
+            return true;
+        }
         GameLog::create([
             "user_id" => $this->user->id,
             "level_id" => $level->id,
             "hint_count" => $this->user->hint_count(),
         ]);
         if ($level->check_level($_text)) {
+            $prize = $level->prize();
+            OutputHelper::win_level($this->user, $prize);
+
             // to the next level
             $this->user->next_level();
 
             // Prize
-            $prize = $level->prize();
             // add Transaction
             $transaction = Transaction::create([
                 "balance" => $prize,
@@ -40,8 +45,6 @@ class GameController extends Controller
             $this->user->credit = $transaction->credit_calculate();
             $this->user->save();
 
-            // output :)
-            OutputHelper::win_level($this->user, $prize);
             return;
         }
         OutputHelper::lose_level($this->user);
