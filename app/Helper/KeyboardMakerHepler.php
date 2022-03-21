@@ -28,7 +28,12 @@ class KeyboardMakerHepler
         return [];
     }
 
-    public static function start_command(): array
+    public static function start_command_guest(): array
+    {
+        return TelegramHelper::make_keyboard([[["text" => "شروع بازی"]]], false, true);
+    }
+
+    public static function start_command_user(): array
     {
         return TelegramHelper::make_keyboard([[["text" => "شروع بازی"]]], false, true);
     }
@@ -106,5 +111,10 @@ class KeyboardMakerHepler
             true,
             true
         );
+    }
+
+    public static function friend_invite_gift_back()
+    {
+        return [];
     }
 }
