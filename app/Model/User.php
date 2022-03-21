@@ -13,6 +13,7 @@ final class User extends Model
         "chat_id" => PDO::PARAM_STR,
         "credit" => PDO::PARAM_INT,
         "level" => PDO::PARAM_INT,
+        "invite_key" => PDO::PARAM_STR,
         "created_at" => PDO::PARAM_STR,
         "updated_at" => PDO::PARAM_STR,
     ];
@@ -40,12 +41,12 @@ final class User extends Model
         $user = self::get_first("WHERE chat_id=:chat_id", ["chat_id" => $_chat_id]);
         if (!$user || empty($user)) {
             $level_id = Level::get_first("", [], "ORDER BY orders asc")->order ?? 0;
-            self::create([
+            $user = self::create([
                 "chat_id" => $_chat_id,
                 "credit" => $_ENV["DEFAULT_CREDIT"],
                 "level" => $level_id,
+                "invite_key" => uniqid(),
             ]);
-            $user = self::get_first("WHERE chat_id=:chat_id", ["chat_id" => $_chat_id]);
         }
         return $user;
     }
@@ -74,5 +75,14 @@ final class User extends Model
             [":user_id" => $this->id, ":level_id" => $this->level()->id],
             "ORDER BY hint_count DESC"
         )->hint_count ?? 0;
+    }
+
+    public function invite_link(): string
+    {
+        if (empty($this->invite_key)) {
+            $this->invite_key = uniqid();
+            $this->save();
+        }
+        return $_ENV["BOT_LINK"] . "?start=" . $this->invite_key;
     }
 }
