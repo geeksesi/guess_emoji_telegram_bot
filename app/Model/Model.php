@@ -55,7 +55,11 @@ abstract class Model
             throw new \Exception("Cannot Store model : " . get_class(), 1);
         }
         $id = $db->lastInsertId();
-        return self::find($id);
+        $model = self::find($id);
+        if (method_exists($model, "on_create")) {
+            $model->on_create();
+        }
+        return $model;
     }
 
     public static function update(array $parameter, int $_id): bool

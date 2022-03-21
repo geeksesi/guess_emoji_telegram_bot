@@ -9,6 +9,16 @@ use App\Model\User;
 
 class OutputHelper
 {
+    public static function by_type(string $_chat_id, OutputMessageEnum $_type)
+    {
+        $message = OutputMessage::by_type($_type);
+        if (empty($message)) {
+            return false;
+        }
+        $keyboard = KeyboardMakerHepler::by_type($_type);
+        TelegramHelper::send_message($message->text, $_chat_id, $keyboard);
+    }
+
     public static function win_level(User $_user)
     {
         self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_WIN);
@@ -21,14 +31,10 @@ class OutputHelper
         self::level($_user);
     }
 
-    public static function by_type(string $_chat_id, OutputMessageEnum $_type)
+    public static function new_level(User $_user)
     {
-        $message = OutputMessage::by_type($_type);
-        if (empty($message)) {
-            return false;
-        }
-        $keyboard = KeyboardMakerHepler::by_type($_type);
-        TelegramHelper::send_message($message->text, $_chat_id, $keyboard);
+        self::by_type($_user->chat_id, OutputMessageEnum::NEW_LEVEL);
+        self::level($_user);
     }
 
     public static function level(User $_user)

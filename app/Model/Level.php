@@ -1,6 +1,7 @@
 <?php
 namespace App\Model;
 
+use App\Helper\OutputHelper;
 use PDO;
 
 final class Level extends Model
@@ -53,5 +54,14 @@ final class Level extends Model
     public function prize(): int
     {
         return 20;
+    }
+
+    public function on_create()
+    {
+        // notify to users for new mission
+        $users = User::get_all("WHERE level=:level", [":level" => $this->orders - 1]);
+        foreach ($users as $user) {
+            OutputHelper::new_level($user);
+        }
     }
 }

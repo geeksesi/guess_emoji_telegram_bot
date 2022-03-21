@@ -22,6 +22,9 @@ enum OutputMessageEnum: int
     // Commands
     case START_COMMAND = 30;
 
+    // Notify
+    case NEW_LEVEL = 50;
+
     // Errors
     case LOW_CREDIT = 401;
     case NO_MISSION = 404;
