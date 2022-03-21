@@ -59,7 +59,7 @@ final class Level extends Model
     public function on_create()
     {
         // notify to users for new mission
-        $users = User::get_all("WHERE level=:level", [":level" => $this->orders - 1]);
+        $users = User::get_all("WHERE level=:level", [":level" => $this->orders]);
         foreach ($users as $user) {
             OutputHelper::new_level($user);
         }
