@@ -11,7 +11,7 @@ class FreeCreditKeyboardController extends Controller
 {
     public function __invoke(): bool
     {
-        TelegramHelper::send_message("در دست احداث", $this->chat_id);
+        OutputHelper::free_credit($this->user);
 
         return true;
     }

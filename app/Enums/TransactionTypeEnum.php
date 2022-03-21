@@ -8,7 +8,8 @@ enum TransactionTypeEnum: int
 
     // +
     case BUY_CREDIT = 20;
-    case FRIEND_INVITE = 21;
     case SUGGEST_LEVEL = 22;
     case WIN_LEVEL = 23;
+    case FRIEND_INVITE = 24;
+    case FRIEND_GIFT_BACK = 25;
 }

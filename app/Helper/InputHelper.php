@@ -22,6 +22,7 @@ use App\Controller\Keyboard\LeaderBoardKeyboardController;
 use App\Controller\Keyboard\SupportKeyboardController;
 use App\Controller\Keyboard\YourCreditKeyboardController;
 use App\Controller\Keyboard\YoutubeKeyboardController;
+use App\Model\User;
 
 class InputHelper
 {
@@ -59,6 +60,10 @@ class InputHelper
     }
     private function private()
     {
+        if (!User::get_first("WHERE chat_id=:chat_id", [":chat_id" => $this->update["message"]["chat"]["id"]])) {
+            return (new StartCommandController($this->update))();
+        }
+
         if (isset($this->update["message"]["text"])) {
             return $this->text();
         }

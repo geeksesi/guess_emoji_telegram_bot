@@ -20,10 +20,13 @@ enum OutputMessageEnum: int
     case YOUTUBE = 26;
 
     // Commands
-    case START_COMMAND = 30;
+    case START_COMMAND_GUEST = 30;
+    case START_COMMAND_USER = 31;
 
     // Notify
     case NEW_LEVEL = 50;
+    case INVATION_SUCCESS = 51;
+    case FRIEND_INVITE_GIFT_BACK = 52;
 
     // Errors
     case LOW_CREDIT = 401;
