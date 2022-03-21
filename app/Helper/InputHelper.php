@@ -132,17 +132,22 @@ class InputHelper
             case "📞 تماس با ما":
                 return (new ContactKeyboardController($this->update))();
                 break;
-            case "🪄 کمک می‌خوای ؟":
-                return (new HintKeyboardController($this->update))();
-                break;
+            // case "🪄 کمک می‌خوای ؟":
+            //     return (new HintKeyboardController($this->update))();
+            //     break;
             case "😍 حمایت از ما":
                 return (new SupportKeyboardController($this->update))();
                 break;
 
             default:
-                return false;
                 break;
         }
+
+        if (stripos($this->update["message"]["text"], "کمک می‌خوای")) {
+            return (new HintKeyboardController($this->update))();
+        }
+
+        return false;
     }
 
     private function admin()

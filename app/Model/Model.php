@@ -88,7 +88,10 @@ abstract class Model
         foreach ($bind_params as $key => $value) {
             $query->bindParam($key, $value["value"], $value["type"]);
         }
-        return (bool) $query->execute();
+        if (!$query->execute()) {
+            throw new \Exception("Cannot Store model : " . get_class(), 1);
+        }
+        return true;
     }
 
     public static function get_first(string $_where = "", array $_params = [], string $_order = "order by id asc")

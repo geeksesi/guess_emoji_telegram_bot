@@ -66,4 +66,13 @@ final class User extends Model
     {
         return 25;
     }
+
+    public function hint_count()
+    {
+        return GameLog::get_first(
+            "WHERE user_id=:user_id AND level_id=:level_id",
+            [":user_id" => $this->id, ":level_id" => $this->level()->id],
+            "ORDER BY hint_count DESC"
+        )->hint_count ?? 0;
+    }
 }

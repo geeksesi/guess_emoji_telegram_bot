@@ -32,7 +32,6 @@ class AddHintController extends Controller
         if (!isset($sections[1])) {
             return;
         }
-
         $hint = trim($sections[0]) ?? throw new \Exception("Unvalid hint");
         $order = (int) trim($sections[1]) ?? throw new \Exception("Unvalid order");
 

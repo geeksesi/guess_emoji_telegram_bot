@@ -23,5 +23,7 @@ enum OutputMessageEnum: int
     case START_COMMAND = 30;
 
     // Errors
+    case LOW_CREDIT = 401;
     case NO_MISSION = 404;
+    case NO_HINT = 405;
 }

@@ -25,7 +25,7 @@ class OutputHelper
     {
         $message = OutputMessage::by_type($_type);
         if (empty($message)) {
-            return;
+            return false;
         }
         $keyboard = KeyboardMakerHepler::by_type($_type);
         TelegramHelper::send_message($message->text, $_chat_id, $keyboard);
@@ -47,5 +47,10 @@ class OutputHelper
     {
         $keyboard = KeyboardMakerHepler::free_credit();
         TelegramHelper::send_message("در دست احداث 👷 ", $_chat_id, $keyboard);
+    }
+
+    public static function low_credit(string $_chat_id)
+    {
+        self::by_type($_chat_id, OutputMessageEnum::LOW_CREDIT);
     }
 }

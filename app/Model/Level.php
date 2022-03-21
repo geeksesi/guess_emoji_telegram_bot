@@ -40,4 +40,18 @@ final class Level extends Model
     public function auto_generate_hints()
     {
     }
+
+    public function hint(int $_order)
+    {
+        return LevelHint::get_first(
+            "WHERE level_id=:level_id AND orders>:orders",
+            [":level_id" => $this->id, ":orders" => $_order],
+            "ORDER BY orders asc"
+        );
+    }
+
+    public function prize(): int
+    {
+        return 20;
+    }
 }
