@@ -11,7 +11,7 @@ class GameContinueKeyboardController extends Controller
     public function __invoke(): bool
     {
         // Start Message
-        OutputHelper::by_type($this->chat_id, OutputMessageEnum::CONTINUE);
+        OutputHelper::by_type($this->chat_id, OutputMessageEnum::CONTINUE, true);
 
         // Show Level
         OutputHelper::level($this->user);

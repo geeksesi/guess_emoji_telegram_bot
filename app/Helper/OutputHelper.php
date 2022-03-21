@@ -9,9 +9,13 @@ use App\Model\User;
 
 class OutputHelper
 {
-    public static function by_type(string $_chat_id, OutputMessageEnum $_type)
+    public static function by_type(string $_chat_id, OutputMessageEnum $_type, bool $_random = false)
     {
-        $message = OutputMessage::by_type($_type);
+        if ($_random) {
+            $message = OutputMessage::random($_type);
+        } else {
+            $message = OutputMessage::by_type($_type);
+        }
         if (empty($message)) {
             return false;
         }
@@ -21,19 +25,19 @@ class OutputHelper
 
     public static function win_level(User $_user)
     {
-        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_WIN);
+        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_WIN, true);
         self::level($_user);
     }
 
     public static function lose_level(User $_user)
     {
-        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_LOSE);
+        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_LOSE, true);
         self::level($_user);
     }
 
     public static function new_level(User $_user)
     {
-        self::by_type($_user->chat_id, OutputMessageEnum::NEW_LEVEL);
+        self::by_type($_user->chat_id, OutputMessageEnum::NEW_LEVEL, true);
         self::level($_user);
     }
 
