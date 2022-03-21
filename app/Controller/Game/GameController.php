@@ -33,7 +33,7 @@ class GameController extends Controller
             // add Transaction
             $transaction = Transaction::create([
                 "balance" => $prize,
-                "type" => TransactionTypeEnum::WIN_LEVEL,
+                "type" => TransactionTypeEnum::WIN_LEVEL->value,
                 "user_id" => $this->user->id,
             ]);
             // calculate credit
