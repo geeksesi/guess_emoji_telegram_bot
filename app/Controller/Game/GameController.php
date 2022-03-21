@@ -11,9 +11,10 @@ use App\Model\Transaction;
 
 class GameController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): bool
     {
         $this->run_game($this->update["message"]["text"]);
+        return true;
     }
 
     public function run_game($_text)

@@ -19,7 +19,8 @@ class HintKeyboardController extends Controller
         $credit = $this->user->credit;
         // if has not enough
         if ($cost > $credit) {
-            return OutputHelper::by_type($this->chat_id, OutputMessageEnum::LOW_CREDIT);
+            OutputHelper::by_type($this->chat_id, OutputMessageEnum::LOW_CREDIT);
+            return true;
         }
         // fetch Hint
         $level = $this->user->level();
@@ -28,7 +29,8 @@ class HintKeyboardController extends Controller
 
         // if there is no hint say this
         if (!$hint) {
-            return OutputHelper::by_type($this->chat_id, OutputMessageEnum::NO_HINT);
+            OutputHelper::by_type($this->chat_id, OutputMessageEnum::NO_HINT);
+            return true;
         }
 
         // add Transaction
