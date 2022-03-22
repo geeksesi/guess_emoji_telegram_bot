@@ -59,7 +59,7 @@ final class User extends Model
     {
         $cost = 25;
         $hint_count = $this->hint_count();
-        $cost = $cost * ($hint_count * 14);
+        $cost = $cost + $hint_count * 14;
         return $cost;
     }
 
