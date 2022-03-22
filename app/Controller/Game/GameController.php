@@ -36,7 +36,7 @@ class GameController extends Controller
             $level = $this->user->next_level();
 
             OutputHelper::win_level($this->user, $prize);
-
+            TelegramHelper::send_message("🤩 تو " . $level->prize() . " سکه بابت حدس درستت گرفتی 🥳", $this->chat_id);
             // to the next level
             // Prize
             // add Transaction
