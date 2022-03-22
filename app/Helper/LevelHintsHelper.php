@@ -7,81 +7,100 @@ use App\Enums\LevelHintsTypeEnum;
 
 class LevelHintsHelper
 {
+    private static function mbStringToArray($string)
+    {
+        $strlen = mb_strlen($string);
+        while ($strlen) {
+            $array[] = mb_substr($string, 0, 1, "UTF-8");
+            $string = mb_substr($string, 1, $strlen, "UTF-8");
+            $strlen = mb_strlen($string);
+        }
+        return $array;
+    }
+
     public static function generate(Level $level)
     {
-        $range = range(0, strlen($level->answer));
-        $all_hidden = self::word_place($level->answer);
+        $answer = self::mbStringToArray($level->answer);
+        $range = range(0, count($answer));
+        $all_hidden = self::word_place($answer);
         shuffle($range);
-        $phase_count = (int) (count($range) / 4);
+        $phase_count = ceil(count($range) / 3);
         $chunks = array_chunk($range, $phase_count);
         $phase_one = $chunks[0];
         $phase_two = array_merge($phase_one, $chunks[1]);
         $phase_three = array_merge($phase_two, $chunks[2]);
 
+        TelegramHelper::send_message(json_encode($chunks), $_ENV["ADMIN"]);
+        $text = "تعداد حروف با احتساب فاصله (اگه داشته باشه) : " . count($answer);
+        $text .= "\n";
+
         $output = [
             1 => [
                 "level_id" => $level->id,
-                "hint" => $all_hidden,
+                "hint" => self::text($text, $all_hidden),
                 "type" => LevelHintsTypeEnum::AUTO_GENERATE->value,
                 "orders" => 1,
             ],
             2 => [
                 "level_id" => $level->id,
-                "hint" => self::word_phase($level->answer, $phase_one),
+                "hint" => self::text($text, self::word_phase($answer, $phase_one)),
                 "type" => LevelHintsTypeEnum::AUTO_GENERATE->value,
                 "orders" => 2,
             ],
             3 => [
                 "level_id" => $level->id,
-                "hint" => self::word_phase($level->answer, $phase_two),
+                "hint" => self::text($text, self::word_phase($answer, $phase_two)),
                 "type" => LevelHintsTypeEnum::AUTO_GENERATE->value,
                 "orders" => 3,
             ],
             4 => [
                 "level_id" => $level->id,
-                "hint" => self::word_phase($level->answer, $phase_three),
+                "hint" => self::text($text, self::word_phase($answer, $phase_three)),
                 "type" => LevelHintsTypeEnum::AUTO_GENERATE->value,
                 "orders" => 4,
             ],
-            5 => [
-                "level_id" => $level->id,
-                "hint" => $level->answer,
-                "type" => LevelHintsTypeEnum::AUTO_GENERATE->value,
-                "orders" => 5,
-            ],
+            // 5 => [
+            //     "level_id" => $level->id,
+            //     "hint" => $answer,
+            //     "type" => LevelHintsTypeEnum::AUTO_GENERATE->value,
+            //     "orders" => 5,
+            // ],
         ];
         return $output;
     }
 
-    private static function word_place(string $_answer): string
+    private static function word_place(array $_answer): string
     {
         $output = [];
-        foreach (str_split($_answer) as $c) {
-            if ($c == " ") {
-                $output[] = " ";
+        foreach ($_answer as $c) {
+            if ($c === " ") {
+                $output[] = "▫️";
                 continue;
             }
-            $output[] = "*";
+            $output[] = "➖";
         }
         return implode("", $output);
     }
 
-    private static function word_phase(string $_answer, array $_keys): string
+    private static function word_phase(array $_answer, array $_keys): string
     {
-        $output = "";
-        foreach (str_split($_answer) as $i => $c) {
-            // var_dump($i . "::" . $_answer[$i]);
+        $output = [];
+        foreach ($_answer as $i => $c) {
+            if ($c === " ") {
+                $output[] = "▫️";
+                continue;
+            }
             if (in_array($i, $_keys)) {
-                $output .= $_answer[$i];
+                $output[] = $c;
                 continue;
             }
-            if ($c == " ") {
-                $output .= " ";
-                continue;
-            }
-            $output .= "*";
+            $output[] = "➖";
         }
-        // var_dump(implode("", $output), count($_keys));
-        return mb_convert_encoding($output, "UTF-8", "UTF-8");
+        return implode($output);
+    }
+
+    public static function text($text, $generated)
+    {
+        return $text . "\n" . $generated;
     }
 }
