@@ -13,7 +13,7 @@ class TelegramHelper
      */
     private static function init(): void
     {
-        self::$url = 'https://api.telegram.org/bot' . $_ENV['TOKEN'] . '/';
+        self::$url = "https://api.telegram.org/bot" . $_ENV["TOKEN"] . "/";
     }
 
     /**
@@ -36,7 +36,7 @@ class TelegramHelper
         if (!empty($_parameters)) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($_parameters));
         }
-        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ["Content-Type:application/json"]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $result = curl_exec($curl);
@@ -46,12 +46,15 @@ class TelegramHelper
         }
         curl_close($curl);
         if (!is_null($error)) {
-            return false;
+            throw new \Exception("CURL :" . curl_error($curl));
         }
 
         $output = json_decode($result, true);
         if (is_null($output)) {
-            return false;
+            throw new \Exception("CURL : EMPTY RESPONSE");
+        }
+        if (!isset($output["ok"]) || !$output["ok"]) {
+            throw new \Exception("TG : " . json_encode($output["description"]));
         }
         return $output;
     }
@@ -67,13 +70,13 @@ class TelegramHelper
     public static function send_message(string $_text, string $_chat_id, array $_keyboard = [])
     {
         $parameters = [
-            'text' => $_text,
-            'chat_id' => $_chat_id,
+            "text" => $_text,
+            "chat_id" => $_chat_id,
         ];
         if (!empty($_keyboard)) {
-            $parameters['reply_markup'] = $_keyboard;
+            $parameters["reply_markup"] = $_keyboard;
         }
-        return self::execute('sendMessage', $parameters);
+        return self::execute("sendMessage", $parameters);
     }
 
     /**
@@ -87,9 +90,9 @@ class TelegramHelper
     public static function make_keyboard(array $_keyboard, bool $_resize = false, bool $_one_time = false): array
     {
         return [
-            'keyboard' => $_keyboard,
-            'resize_keyboard' => $_resize,
-            'one_time_keyboard' => $_one_time,
+            "keyboard" => $_keyboard,
+            "resize_keyboard" => $_resize,
+            "one_time_keyboard" => $_one_time,
         ];
     }
 
@@ -104,12 +107,12 @@ class TelegramHelper
     {
         $parameters = [];
         if (!is_null($_offset)) {
-            $parameters['offset'] = $_offset;
+            $parameters["offset"] = $_offset;
         }
-        $result = self::execute('getUpdates', $parameters);
-        if (!is_array($result) || !isset($result['result'])) {
+        $result = self::execute("getUpdates", $parameters);
+        if (!is_array($result) || !isset($result["result"])) {
             return false;
         }
-        return $result['result'];
+        return $result["result"];
     }
 }
