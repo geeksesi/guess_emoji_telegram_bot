@@ -29,11 +29,7 @@ final class User extends Model
             $this->save();
         }
         $level = Level::get_first("WHERE orders=:orders", ["orders" => $this->level]);
-        if ($level) {
-            return $level;
-        }
-        OutputHelper::by_type($this->chat_id, OutputMessageEnum::NO_MISSION);
-        return null;
+        return $level;
     }
 
     public static function get_or_create(string $_chat_id): self

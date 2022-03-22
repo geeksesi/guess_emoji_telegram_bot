@@ -44,7 +44,12 @@ class OutputHelper
     public static function level(User $_user)
     {
         $keyboard = KeyboardMakerHepler::level($_user);
-        TelegramHelper::send_message($_user->level()->quest, $_user->chat_id, $keyboard);
+        $level = $_user->level();
+        if ($level) {
+            TelegramHelper::send_message($level->quest, $_user->chat_id, $keyboard);
+            return;
+        }
+        OutputHelper::by_type($_user->chat_id, OutputMessageEnum::NO_MISSION);
     }
 
     public static function leader_board(string $_chat_id)
