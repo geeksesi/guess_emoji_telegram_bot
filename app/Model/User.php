@@ -52,11 +52,7 @@ final class User extends Model
         $this->level = $this->level + 1;
         $this->save();
         $level = $this->level();
-        if ($level) {
-            return $level;
-        }
-        OutputHelper::by_type($this->chat_id, OutputMessageEnum::FINISH_GAME);
-        return false;
+        return $level;
     }
 
     public function hint_cost(): int

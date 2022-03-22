@@ -3,6 +3,7 @@
 namespace App\Controller\Game;
 
 use App\Controller\Controller;
+use App\Enums\OutputMessageEnum;
 use App\Enums\TransactionTypeEnum;
 use App\Helper\OutputHelper;
 use App\Helper\TelegramHelper;
@@ -31,11 +32,12 @@ class GameController extends Controller
         ]);
         if ($level->check_level($_text)) {
             $prize = $level->prize();
+
+            $level = $this->user->next_level();
+
             OutputHelper::win_level($this->user, $prize);
 
             // to the next level
-            $this->user->next_level();
-
             // Prize
             // add Transaction
             $transaction = Transaction::create([
@@ -46,6 +48,10 @@ class GameController extends Controller
             // calculate credit
             $this->user->credit = $transaction->credit_calculate();
             $this->user->save();
+
+            if (empty($level)) {
+                OutputHelper::by_type($this->chat_id, OutputMessageEnum::FINISH_GAME);
+            }
 
             return;
         }
