@@ -23,9 +23,10 @@ class OutputHelper
         TelegramHelper::send_message($message->text, $_chat_id, $keyboard);
     }
 
-    public static function win_level(User $_user)
+    public static function win_level(User $_user, int $_prize)
     {
         self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_WIN, true);
+        TelegramHelper::send_message("🤩 تو " . $_prize . " سکه بابت حدس درستت گرفتی 🥳", $this->chat_id);
         self::level($_user);
     }
 
