@@ -47,7 +47,7 @@ final class Level extends Model
         return LevelHint::get_first(
             "WHERE level_id=:level_id AND orders>:orders",
             [":level_id" => $this->id, ":orders" => $_order],
-            "ORDER BY orders asc"
+            "ORDER BY orders ASC, id DESC"
         );
     }
 
