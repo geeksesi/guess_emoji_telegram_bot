@@ -21,6 +21,7 @@ class GameController extends Controller
     {
         $level = $this->user->level();
         if (!$level) {
+            OutputHelper::level($this->user);
             return true;
         }
         GameLog::create([
