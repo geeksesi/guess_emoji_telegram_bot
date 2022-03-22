@@ -80,6 +80,23 @@ class TelegramHelper
     }
 
     /**
+     * [send_message description]
+     *
+     * @param   string  $_text     [$_text description]
+     * @param   string  $_chat_id  [$_chat_id description]
+     *
+     * @return  array              [return description]
+     */
+    public static function get_user(string $_chat_id)
+    {
+        $parameters = [
+            "chat_id" => $_chat_id,
+        ];
+
+        return self::execute("getChat", $parameters);
+    }
+
+    /**
      * Undocumented function
      *
      * @param array $_keyboard

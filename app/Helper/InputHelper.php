@@ -5,6 +5,7 @@ namespace App\Helper;
 use App\Controller\Admin\AddHintController;
 use App\Controller\Admin\AddLevelController;
 use App\Controller\Admin\AddOutputMessageController;
+use App\Controller\Admin\GetUserByChatIdController;
 use App\Controller\Admin\HelpController;
 use App\Controller\Admin\ListHintsController;
 use App\Controller\Admin\ListLevelsController;
@@ -186,6 +187,9 @@ class InputHelper
                 break;
             case "!listOMesg":
                 return (new ListOutputMessagesController($this->update))();
+                break;
+            case "!getUserId":
+                return (new GetUserByChatIdController($this->update))();
                 break;
 
             default:
