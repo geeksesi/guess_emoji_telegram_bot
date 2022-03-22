@@ -51,6 +51,7 @@ class GameController extends Controller
 
             if (empty($level)) {
                 OutputHelper::by_type($this->chat_id, OutputMessageEnum::FINISH_GAME);
+                TelegramHelper::send_message("SOME BODY FINISHED GAME 😦", $_ENV["ADMIN"]);
             }
 
             return;
