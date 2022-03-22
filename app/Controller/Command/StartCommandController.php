@@ -67,6 +67,6 @@ class StartCommandController extends Controller
         // calculate credit
         $parent->credit = $transaction->credit_calculate();
         $parent->save();
-        OutputHelper::by_type($this->chat_id, OutputMessageEnum::INVATION_SUCCESS);
+        OutputHelper::by_type($parent->chat_id, OutputMessageEnum::INVATION_SUCCESS);
     }
 }
