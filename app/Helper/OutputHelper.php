@@ -61,12 +61,23 @@ class OutputHelper
 
     public static function free_credit(User $_user)
     {
+        $invite_message = "";
+        $invite_message .= "یه چالش جدید توی تلگرام پیدا کردم 😉 بیا ببینم می تونی حدس بزنی این شکلک یعنی چی ؟";
+        $invite_message .= "\n";
+        $invite_message .= "🥖👄";
+        $invite_message .= "\n";
+        $invite_message .= "🤖 رو این لینک کلیک کن: ";
+        $invite_message .= $_user->invite_link();
+
+        TelegramHelper::send_message($invite_message, $_user->chat_id);
+
         $keyboard = KeyboardMakerHepler::free_credit();
         $message = "";
-        $message .= "این لینک رو برای دوستات بفرست، اونها رو به بازی دعوت کن و 80 تا سکه بگیر 🤩";
+        $message .= "پیام بالا رو برای دوستات بفرست، اونها رو به بازی دعوت کن و 80 تا سکه بگیر 🤩";
         $message .= "\n";
         $message .= "راستی دوستت هم 40 تا سکه بیشتر می گیره اول بازی. فقط به خاطر اینکه دوست شماست 😉";
         $message .= "\n";
+        $message .= "🔗 اینم لینک اختصاصی شماست : ";
         $message .= $_user->invite_link();
 
         TelegramHelper::send_message($message, $_user->chat_id, $keyboard);
