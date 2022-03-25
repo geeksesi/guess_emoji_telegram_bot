@@ -13,6 +13,7 @@
   ],
   "require": {
     "vlucas/phpdotenv": "^5.4",
-    "robmorgan/phinx": "^0.12.10"
+    "robmorgan/phinx": "^0.12.10",
+    "fakerphp/faker": "^1.19"
   }
 }
