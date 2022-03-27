@@ -28,15 +28,6 @@ final class Level extends Model
         return false;
     }
 
-    public static function get_last_order()
-    {
-        $last = self::get_first("", [], "ORDER BY orders DESC");
-        if (!$last || empty($last)) {
-            return 0;
-        }
-        return $last->orders;
-    }
-
     public function auto_generate_hints()
     {
     }
