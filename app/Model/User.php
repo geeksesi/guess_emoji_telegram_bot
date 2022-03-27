@@ -24,11 +24,8 @@ final class User extends Model
 
     public function level()
     {
-        if ($this->level === 0) {
-            $this->level = 1;
-            $this->save();
-        }
-        $level = Level::get_first("WHERE orders=:orders", ["orders" => $this->level]);
+        $this->next_level();
+        $level = Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
         return $level;
     }
 
@@ -36,12 +33,9 @@ final class User extends Model
     {
         $user = self::get_first("WHERE chat_id=:chat_id", ["chat_id" => $_chat_id]);
         if (!$user || empty($user)) {
-            $level_id = Level::get_first("", [], "ORDER BY orders asc")->order ?? 0;
             $user = self::create([
                 "chat_id" => $_chat_id,
                 "credit" => $_ENV["DEFAULT_CREDIT"],
-                "level" => $level_id,
-                "invite_key" => uniqid(),
             ]);
         }
         return $user;
@@ -49,10 +43,18 @@ final class User extends Model
 
     public function next_level(): Level|bool
     {
-        $this->level = $this->level + 1;
+        $next_level = Level::get_first(
+            "WHERE id NOT IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) AND difficulty <= (SELECT MAX(difficulty) FROM levels WHERE id IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) )",
+            [":user_id" => $this->id, ":user_id" => $this->id],
+            "ORDER BY RAND()"
+        );
+        $this->level_id = $next_level->id ?? null;
         $this->save();
-        $level = $this->level();
-        return $level;
+        if ($this->level_id) {
+            $level = $this->level();
+            return $level;
+        }
+        return null;
     }
 
     public function hint_cost(): int
