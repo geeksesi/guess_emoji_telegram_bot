@@ -29,9 +29,9 @@ class AddLevelController extends Controller
 
         $question = trim($sections[0]) ?? throw new \Exception("Unvalid quest");
         $answer = trim($sections[1]) ?? throw new \Exception("Unvalid answer");
-        $order = (int) $sections[2] ?? Level::get_last_order();
+        $difficualty = (int) trim($sections[2]) ?? 1;
 
-        $level = Level::create(["quest" => $question, "answer" => $answer, "orders" => $order]);
+        $level = Level::create(["quest" => $question, "answer" => $answer, "difficulty" => $difficualty]);
         // $auto_hints = LevelHintsHelper::generate($level);
         TelegramHelper::send_message("مرحله جدید : " . $level->quest . " :: " . $level->answer, $this->chat_id);
     }
