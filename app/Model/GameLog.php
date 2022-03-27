@@ -13,6 +13,8 @@ final class GameLog extends Model
         "user_id" => PDO::PARAM_INT,
         "level_id" => PDO::PARAM_INT,
         "hint_count" => PDO::PARAM_INT,
+        "try" => PDO::PARAM_INT,
+        "balance" => PDO::PARAM_INT,
         "created_at" => PDO::PARAM_INT,
     ];
 

@@ -12,7 +12,7 @@ final class User extends Model
         "id" => PDO::PARAM_INT,
         "chat_id" => PDO::PARAM_STR,
         "credit" => PDO::PARAM_INT,
-        "level" => PDO::PARAM_INT,
+        "level_id" => PDO::PARAM_INT,
         "invite_key" => PDO::PARAM_STR,
         "created_at" => PDO::PARAM_STR,
         "updated_at" => PDO::PARAM_STR,
