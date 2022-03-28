@@ -13,7 +13,7 @@ class KeyboardMakerHepler
         "free_credit" => "💸 سکه رایگان",
         "buy_credit" => "💳 خرید سکه",
         "your_credit" => "💵 سکه‌های شما‌ : ",
-        "youtube" => "🎓 دوست داری یاد بگیری یه ربات مثل این بسازی ؟",
+        "youtube" => "آموزش ساخت بازی 🕹",
         "about" => "🖥 درباره ما",
         "contact" => "📞 تماس با ما",
         "hint" => "🪄 کمک می‌خوای ؟",
@@ -35,15 +35,29 @@ class KeyboardMakerHepler
 
     public static function start_command_user(): array
     {
-        return TelegramHelper::make_keyboard([[["text" => "شروع بازی"]]], false, true);
+        return TelegramHelper::make_keyboard([[["text" => "ادامه بازی"]]], false, true);
+    }
+
+    public static function new_level(): array
+    {
+        return self::start_command_user();
     }
 
     public static function default_keyboard()
     {
         return TelegramHelper::make_keyboard(
             [
-                [["text" => self::$texts["continue"]], ["text" => self::$texts["about"]]],
-                [["text" => self::$texts["free_credit"]], ["text" => self::$texts["youtube"]]],
+                [
+                    ["text" => self::$texts["continue"]],
+                    ["text" => self::$texts["free_credit"]],
+                    ["text" => self::$texts["support"]],
+                ],
+                [
+                    ["text" => self::$texts["about"]],
+                    ["text" => self::$texts["youtube"]],
+                    ["text" => self::$texts["contact"]],
+                ],
+                [["text" => self::$texts["your_credit"]], ["text" => self::$texts["buy_credit"]]],
             ],
             true,
             true
@@ -52,14 +66,7 @@ class KeyboardMakerHepler
 
     public static function get_score()
     {
-        return TelegramHelper::make_keyboard(
-            [
-                [["text" => self::$texts["continue"]], ["text" => self::$texts["about"]]],
-                [["text" => self::$texts["free_credit"]], ["text" => self::$texts["buy_credit"]]],
-            ],
-            true,
-            true
-        );
+        return self::default_keyboard();
     }
 
     public static function level(User $user)
@@ -79,38 +86,17 @@ class KeyboardMakerHepler
 
     public static function leader_board()
     {
-        return TelegramHelper::make_keyboard(
-            [
-                [["text" => self::$texts["continue"]], ["text" => self::$texts["about"]]],
-                [["text" => self::$texts["support"]]],
-            ],
-            true,
-            true
-        );
+        return self::default_keyboard();
     }
 
     public static function free_credit()
     {
-        return TelegramHelper::make_keyboard(
-            [
-                [["text" => self::$texts["continue"]], ["text" => self::$texts["about"]]],
-                [["text" => self::$texts["support"]], ["text" => self::$texts["buy_credit"]]],
-            ],
-            true,
-            true
-        );
+        return self::default_keyboard();
     }
 
     public static function about()
     {
-        return TelegramHelper::make_keyboard(
-            [
-                [["text" => self::$texts["continue"]], ["text" => self::$texts["contact"]]],
-                [["text" => self::$texts["youtube"]], ["text" => self::$texts["support"]]],
-            ],
-            true,
-            true
-        );
+        return self::default_keyboard();
     }
 
     public static function friend_invite_gift_back()
@@ -120,6 +106,18 @@ class KeyboardMakerHepler
 
     public static function no_mission()
     {
-        return self::default_keyboard();
+        return TelegramHelper::make_keyboard(
+            [
+                [["text" => self::$texts["support"]]],
+                [["text" => self::$texts["about"]], ["text" => self::$texts["contact"]]],
+                [["text" => self::$texts["youtube"]]],
+            ],
+            true,
+            true
+        );
+    }
+    public static function FINISH_GAME()
+    {
+        return self::no_mission();
     }
 }
