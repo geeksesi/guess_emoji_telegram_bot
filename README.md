@@ -48,3 +48,6 @@ https://api.telegram.org/botTOKEN/getWebhookInfo
 ```
 https://api.telegram.org/botTOKEN/setWebhook?url=URL
 ```
+
+# راه اندازی 
+[Wiki](https://github.com/geeksesi/guess_emoji_telegram_bot/wiki)
