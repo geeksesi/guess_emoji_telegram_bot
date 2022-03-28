@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Controller;
 use App\Helper\TelegramHelper;
 use App\Model\LevelHint;
 

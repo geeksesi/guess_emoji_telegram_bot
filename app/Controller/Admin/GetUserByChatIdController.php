@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Controller;
 use App\Helper\TelegramHelper;
 
 class GetUserByChatIdController extends Controller

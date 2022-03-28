@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Controller;
 use App\Enums\LevelHintsTypeEnum;
 use App\Helper\LevelHintsHelper;
 use App\Helper\TelegramHelper;
