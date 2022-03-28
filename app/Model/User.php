@@ -24,7 +24,6 @@ final class User extends Model
 
     public function level()
     {
-        $this->next_level();
         $level = Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
         return $level;
     }
@@ -36,6 +35,7 @@ final class User extends Model
             $user = self::create([
                 "chat_id" => $_chat_id,
                 "credit" => $_ENV["DEFAULT_CREDIT"],
+                "level_id" => $_ENV["START_LEVEL_ID"],
             ]);
         }
         return $user;

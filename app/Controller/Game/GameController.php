@@ -3,6 +3,7 @@
 namespace App\Controller\Game;
 
 use App\Controller\Controller;
+use App\Enums\GameLogActionEnum;
 use App\Enums\OutputMessageEnum;
 use App\Enums\TransactionTypeEnum;
 use App\Helper\OutputHelper;
@@ -25,18 +26,13 @@ class GameController extends Controller
             OutputHelper::level($this->user);
             return true;
         }
-        GameLog::create([
-            "user_id" => $this->user->id,
-            "level_id" => $level->id,
-            "hint_count" => $this->user->hint_count(),
-        ]);
         if ($level->check_level($_text)) {
-            $prize = $level->prize();
-            $level = $this->user->next_level();
-
-            OutputHelper::win_level($this->user, $prize);
-            // to the next level
             // Prize
+            $prize = $level->prize();
+            GameLog::action($level, $this->user, GameLogActionEnum::WIN, $prize);
+            // to the next level
+            $level = $this->user->next_level();
+            OutputHelper::win_level($this->user, $prize);
             // add Transaction
             $transaction = Transaction::create([
                 "balance" => $prize,
@@ -54,6 +50,8 @@ class GameController extends Controller
 
             return;
         }
+        GameLog::action($level, $this->user, GameLogActionEnum::LOSE);
+
         OutputHelper::lose_level($this->user);
     }
 }

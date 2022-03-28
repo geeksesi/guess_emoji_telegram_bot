@@ -74,6 +74,9 @@ class InputHelper
     // has not yet any plan to work on groups
     private function group()
     {
+        if ($admin = $this->admin()) {
+            return $admin;
+        }
         return null;
     }
 
@@ -162,7 +165,10 @@ class InputHelper
             return false;
         }
         // check admin here.
-        if ($this->update["message"]["chat"]["id"] != $_ENV["ADMIN"]) {
+        if (
+            $this->update["message"]["chat"]["id"] != $_ENV["ADMIN"] &&
+            $this->update["message"]["chat"]["id"] != $_ENV["ADMIN_GP"]
+        ) {
             return false;
         }
         $command = substr($this->update["message"]["text"], 0, 10);

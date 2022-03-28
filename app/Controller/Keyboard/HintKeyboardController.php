@@ -3,6 +3,7 @@
 namespace App\Controller\Keyboard;
 
 use App\Controller\Controller;
+use App\Enums\GameLogActionEnum;
 use App\Enums\OutputMessageEnum;
 use App\Enums\TransactionTypeEnum;
 use App\Helper\OutputHelper;
@@ -44,7 +45,7 @@ class HintKeyboardController extends Controller
         $this->user->save();
 
         // update user level try
-        GameLog::create(["user_id" => $this->user->id, "level_id" => $level->id, "hint_count" => $hint_count + 1]);
+        GameLog::action($level, $this->user, GameLogActionEnum::HINT, $cost * -1);
 
         // send hint
         TelegramHelper::send_message($hint->hint, $this->chat_id);

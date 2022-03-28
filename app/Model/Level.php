@@ -43,15 +43,17 @@ final class Level extends Model
 
     public function prize(): int
     {
-        return 20;
+        return 20 + 5 * $this->difficulty;
     }
 
     public function on_create()
     {
-        // notify to users for new mission
-        $users = User::get_all("WHERE level=:level", [":level" => $this->orders]);
+        // Get all users whom has no any level to play
+        $users = User::get_all("WHERE level IS NULL", []);
         foreach ($users as $user) {
-            OutputHelper::new_level($user);
+            $user->level_id = $this->id;
+            // Notif to user for new mission
+            // OutputHelper::new_level($user);
         }
     }
 }

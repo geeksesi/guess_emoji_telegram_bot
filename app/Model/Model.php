@@ -196,6 +196,9 @@ abstract class Model
             if ($key === "id") {
                 continue;
             }
+            if ($key === "created_at") {
+                continue;
+            }
             $params[$key] = ["value" => $this->$key, "type" => $type];
         }
         return self::update($params, (int) $this->id);

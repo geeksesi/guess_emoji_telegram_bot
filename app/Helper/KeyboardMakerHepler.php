@@ -117,4 +117,9 @@ class KeyboardMakerHepler
     {
         return [];
     }
+
+    public static function no_mission()
+    {
+        return self::default_keyboard();
+    }
 }
