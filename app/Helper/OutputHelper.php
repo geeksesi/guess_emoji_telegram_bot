@@ -3,13 +3,20 @@
 namespace App\Helper;
 
 use App\Enums\OutputMessageEnum;
-use App\Model\Level;
 use App\Model\OutputMessage;
 use App\Model\User;
 
 class OutputHelper
 {
-    public static function by_type(string $_chat_id, OutputMessageEnum $_type, bool $_random = false)
+    public static function fill_data(string $text, array $data): string
+    {
+        foreach ($data as $key => $value) {
+            $text = str_replace($key, $value, $text);
+        }
+        return $text;
+    }
+
+    public static function by_type(string $_chat_id, OutputMessageEnum $_type, bool $_random = false, array $data = [])
     {
         if ($_random) {
             $message = OutputMessage::random($_type);
@@ -19,8 +26,14 @@ class OutputHelper
         if (empty($message)) {
             return false;
         }
+
+        $text = $message->text;
+
+        if (!empty($data)) {
+            $text = self::fill_data($message->text, $data);
+        }
         $keyboard = KeyboardMakerHepler::by_type($_type);
-        TelegramHelper::send_message($message->text, $_chat_id, $keyboard);
+        TelegramHelper::send_message($text, $_chat_id, $keyboard);
     }
 
     public static function win_level(User $_user, int $_prize)

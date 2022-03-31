@@ -13,9 +13,11 @@ class ExceptionHepler
         $this->err = $err;
     }
 
-    public function __invoke()
+    public function __invoke(bool $dump = true)
     {
-        var_dump($this->err);
+        if ($dump) {
+            var_dump($this->err);
+        }
         TelegramHelper::send_message("WE HAVE AN ERROR : " . $this->err->getMessage(), $_ENV["ADMIN"]);
     }
 }

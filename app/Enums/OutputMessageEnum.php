@@ -26,6 +26,7 @@ enum OutputMessageEnum: int
     case NEW_LEVEL = 50;
     case INVATION_SUCCESS = 51;
     case FRIEND_INVITE_GIFT_BACK = 52;
+    case SUCCESS_BUY_CREDIT = 53;
 
     // Errors
     case LOW_CREDIT = 401;
