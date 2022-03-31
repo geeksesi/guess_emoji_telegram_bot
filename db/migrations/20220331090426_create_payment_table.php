@@ -30,7 +30,7 @@ final class CreatePaymentTable extends AbstractMigration
                 "delete" => "SET NULL",
                 "update" => "NO_ACTION",
             ])
-            ->addColumn("payment_key", "text", ["null" => true])
+            ->addColumn("payment_key", "string", ["limit" => 500, "null" => true])
             ->addColumn("credit", "integer")
             ->addColumn("cost", "integer")
             ->addColumn("status", "integer", ["default" => 1])
