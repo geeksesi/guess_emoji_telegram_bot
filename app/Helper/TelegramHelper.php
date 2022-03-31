@@ -132,4 +132,23 @@ class TelegramHelper
         }
         return $result["result"];
     }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $_chat_id
+     * @param string $_from_chat_id
+     * @param string $_message_id
+     * @return array
+     */
+    public static function forward(string $_chat_id, string $_from_chat_id, string $_message_id)
+    {
+        $query = [
+            "chat_id" => $_chat_id,
+            "from_chat_id" => $_from_chat_id,
+            "message_id" => $_message_id,
+        ];
+
+        return self::execute("forwardMessage", $query);
+    }
 }
