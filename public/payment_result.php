@@ -58,7 +58,7 @@ if (PaymentStatusEnum::from($payment->status) === PaymentStatusEnum::SUCCESS) {
 $status = $response["status"];
 $status = IdPayHelper::idpay_payment_get_message($status);
 
-if ($status != PaymentStatusEnum::SUCCESS) {
+if ($status != PaymentStatusEnum::PENDING) {
     html([
         "title" => "پرداخت لغو شد",
         "error" => "در صورت کسر، موجودی تا 72 ساعت آینده از طریق آی‌دی‌پی به شما بازگردانده خواهد شد.",
@@ -75,7 +75,7 @@ try {
     (new ExceptionHepler($th))(false);
     die();
 }
-if ($dual_check_status != PaymentStatusEnum::SUCCESS) {
+if ($dual_check_status != PaymentStatusEnum::PENDING) {
     html([
         "title" => "پرداخت لغو شد",
         "error" => "در صورت کسر، موجودی تا 72 ساعت آینده از طریق آی‌دی‌پی به شما بازگردانده خواهد شد.",
@@ -96,7 +96,7 @@ try {
 
 // change payment status
 try {
-    $payment->status = $dual_check_status->value;
+    $payment->status = PaymentStatusEnum::SUCCESS;
     $payment->save();
 } catch (\Throwable $th) {
     (new ExceptionHepler($th))(false);
