@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateAdvertiseTable extends AbstractMigration
+final class ChangeMessageIdTypeAdvertisesTable extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,18 +19,6 @@ final class CreateAdvertiseTable extends AbstractMigration
     public function change(): void
     {
         $table = $this->table("advertises", ["collation" => "utf8mb4_unicode_ci"]);
-        $table
-            ->addColumn("message_id", "integer")
-            ->addColumn("gift_credit", "integer")
-            ->addColumn("status", "integer", ["default" => 1])
-            ->addColumn("created_at", "timestamp", [
-                "default" => "CURRENT_TIMESTAMP",
-            ])
-            ->addColumn("updated_at", "timestamp", [
-                "default" => "CURRENT_TIMESTAMP",
-            ])
-            ->addIndex(["message_id"], ["unique" => true])
-
-            ->create();
+        $table->changeColumn("message_id", "string")->update();
     }
 }
