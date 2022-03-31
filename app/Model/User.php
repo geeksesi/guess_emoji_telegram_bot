@@ -41,7 +41,7 @@ final class User extends Model
         return $user;
     }
 
-    public function next_level(): Level|bool
+    public function next_level()
     {
         $next_level = Level::get_first(
             "WHERE id NOT IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) AND difficulty <= (SELECT MAX(difficulty) FROM levels WHERE id IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) )",
