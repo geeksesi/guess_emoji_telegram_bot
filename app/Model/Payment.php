@@ -26,4 +26,9 @@ final class Payment extends Model
     {
         return self::get_first("WHERE id=:id AND status=1", [":id" => $id]);
     }
+
+    public function user()
+    {
+        return User::get_first("WHERE id=:id", [":id" => $this->user_id]);
+    }
 }
