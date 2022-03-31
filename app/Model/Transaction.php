@@ -11,6 +11,7 @@ final class Transaction extends Model
         "balance" => PDO::PARAM_INT,
         "type" => PDO::PARAM_INT,
         "user_id" => PDO::PARAM_INT,
+        "advertise_id" => PDO::PARAM_INT,
         "payment_id" => PDO::PARAM_INT,
         "created_at" => PDO::PARAM_STR,
     ];
