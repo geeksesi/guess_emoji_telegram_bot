@@ -58,13 +58,13 @@ if (PaymentStatusEnum::from($payment->status) === PaymentStatusEnum::SUCCESS) {
 $status = $response["status"];
 $status = IdPayHelper::idpay_payment_get_message($status);
 
-// if ($status != PaymentStatusEnum::SUCCESS) {
-//     html([
-//         "title" => "پرداخت لغو شد",
-//         "error" => "در صورت کسر، موجودی تا 72 ساعت آینده از طریق آی‌دی‌پی به شما بازگردانده خواهد شد.",
-//     ]);
-//     die();
-// }
+if ($status != PaymentStatusEnum::SUCCESS) {
+    html([
+        "title" => "پرداخت لغو شد",
+        "error" => "در صورت کسر، موجودی تا 72 ساعت آینده از طریق آی‌دی‌پی به شما بازگردانده خواهد شد.",
+    ]);
+    die();
+}
 try {
     $dual_check_status = IdPayHelper::idpay_payment_get_inquiry($payment->payment_key, $payment->id);
 } catch (\Throwable $th) {
@@ -75,24 +75,24 @@ try {
     (new ExceptionHepler($th))(false);
     die();
 }
-// if ($dual_check_status != PaymentStatusEnum::SUCCESS) {
-//     html([
-//         "title" => "پرداخت لغو شد",
-//         "error" => "در صورت کسر، موجودی تا 72 ساعت آینده از طریق آی‌دی‌پی به شما بازگردانده خواهد شد.",
-//     ]);
-//     die();
-// }
+if ($dual_check_status != PaymentStatusEnum::SUCCESS) {
+    html([
+        "title" => "پرداخت لغو شد",
+        "error" => "در صورت کسر، موجودی تا 72 ساعت آینده از طریق آی‌دی‌پی به شما بازگردانده خواهد شد.",
+    ]);
+    die();
+}
 
-// try {
-//     $verify = IdPayHelper::idpay_payment_verify($payment->payment_key, $payment->id);
-// } catch (\Throwable $th) {
-//     html([
-//         "title" => "پرداخت با خطا مواجه شد",
-//         "error" => "در صورت تکرار با ما تماس بگیرید .",
-//     ]);
-//     (new ExceptionHepler($th))(false);
-//     die();
-// }
+try {
+    $verify = IdPayHelper::idpay_payment_verify($payment->payment_key, $payment->id);
+} catch (\Throwable $th) {
+    html([
+        "title" => "پرداخت با خطا مواجه شد",
+        "error" => "در صورت تکرار با ما تماس بگیرید .",
+    ]);
+    (new ExceptionHepler($th))(false);
+    die();
+}
 
 // change payment status
 try {
