@@ -12,4 +12,5 @@ enum TransactionTypeEnum: int
     case WIN_LEVEL = 23;
     case FRIEND_INVITE = 24;
     case FRIEND_GIFT_BACK = 25;
+    case ADVERTISE_GIFT_CREDIT = 26;
 }
