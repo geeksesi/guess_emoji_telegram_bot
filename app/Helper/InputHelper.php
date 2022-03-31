@@ -77,7 +77,16 @@ class InputHelper
         if ($admin = $this->admin()) {
             return $admin;
         }
-        return null;
+        if ($this->update["message"]["chat"]["id"] != $_ENV["ADMIN_GP"]) {
+            return null;
+        }
+        TelegramHelper::send_message(
+            json_encode(
+                $this->update,
+                JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE + JSON_INVALID_UTF8_IGNORE + JSON_UNESCAPED_SLASHES
+            ),
+            $this->update["message"]["chat"]["id"]
+        );
     }
 
     private function text()
