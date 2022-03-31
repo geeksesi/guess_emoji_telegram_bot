@@ -123,5 +123,5 @@ try {
     TelegramHelper::send_message("Error on proccess credit of user PD_ID : " . $payment->id, $_ENV["ADMIN"]);
 }
 
-var_dump($verify);
+// var_dump($verify);
 html(["title" => "پرداخت با موفقیت انجام شد"]);
