@@ -114,9 +114,6 @@ class InputHelper
     private function reply_keyboard()
     {
         switch ($this->update["message"]["text"]) {
-            case "شروع بازی":
-                return (new GameStartKeyboardController($this->update))();
-                break;
             case "💸 سکه رایگان":
                 return (new FreeCreditKeyboardController($this->update))();
                 break;
@@ -129,11 +126,17 @@ class InputHelper
             case "💳 خرید سکه":
                 return (new BuyCreditKeyboardController($this->update))();
                 break;
-            case "💵 سکه‌های شما‌ : ":
-                return (new YourCreditKeyboardController($this->update))();
-                break;
-            case "🎓 دوست داری یاد بگیری یه ربات مثل این بسازی ؟":
+            // case "💵 سکه‌های شما‌ : ":
+            //     return (new YourCreditKeyboardController($this->update))();
+            //     break;
+            case "آموزش ساخت بازی 🕹":
                 return (new YoutubeKeyboardController($this->update))();
+                break;
+            case "شروع بازی":
+                return (new GameStartKeyboardController($this->update))();
+                break;
+            case "ادامه بازی":
+                return (new GameStartKeyboardController($this->update))();
                 break;
             case "🖥 درباره ما":
                 return (new AboutKeyboardController($this->update))();
@@ -154,6 +157,9 @@ class InputHelper
 
         if (stripos($this->update["message"]["text"], "کمک می‌خوای")) {
             return (new HintKeyboardController($this->update))();
+        }
+        if (stripos($this->update["message"]["text"], "سکه‌های شما‌")) {
+            return (new YourCreditKeyboardController($this->update))();
         }
 
         return false;

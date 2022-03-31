@@ -18,6 +18,7 @@ class KeyboardMakerHepler
         "contact" => "📞 تماس با ما",
         "hint" => "🪄 کمک می‌خوای ؟",
         "support" => "😍 حمایت از ما",
+        "profile" => "💀 پروفایل",
     ];
 
     public static function by_type(OutputMessageEnum $type)
@@ -52,15 +53,15 @@ class KeyboardMakerHepler
                     ["text" => self::$texts["free_credit"]],
                     ["text" => self::$texts["support"]],
                 ],
+                [["text" => self::$texts["profile"]], ["text" => self::$texts["buy_credit"]]],
                 [
                     ["text" => self::$texts["about"]],
                     ["text" => self::$texts["youtube"]],
                     ["text" => self::$texts["contact"]],
                 ],
-                [["text" => self::$texts["your_credit"]], ["text" => self::$texts["buy_credit"]]],
             ],
             true,
-            true
+            false
         );
     }
 
@@ -76,7 +77,7 @@ class KeyboardMakerHepler
 
         return TelegramHelper::make_keyboard(
             [
-                [["text" => $credit_text], ["text" => self::$texts["leader_board"]], self::$texts["free_credit"]],
+                [["text" => $credit_text], ["text" => self::$texts["youtube"]], self::$texts["free_credit"]],
                 [["text" => $help_text]],
             ],
             true,
