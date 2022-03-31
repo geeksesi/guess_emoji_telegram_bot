@@ -59,7 +59,7 @@ try {
 
 $params = [
     "order_id" => $payment->id,
-    "amount" => $payment->cost,
+    "amount" => $payment->cost * 10,
     "phone" => "",
     "name" => $user->chat_id,
     "desc" => "خرید بسته : " . $plan->name,
