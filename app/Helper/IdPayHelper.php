@@ -26,12 +26,7 @@ class IdPayHelper
         $result = json_decode($result, true);
 
         if (empty($result) || empty($result["link"])) {
-            print "Exception message:";
-            print "<pre>";
-            print_r($result);
-            print "</pre>";
-
-            return false;
+            throw new \Exception($result, 500);
         }
 
         return $result;
