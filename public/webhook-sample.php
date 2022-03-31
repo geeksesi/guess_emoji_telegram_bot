@@ -18,7 +18,7 @@ $dotenv->safeLoad();
 $input = file_get_contents("php://input");
 
 try {
-    LogHelper::update(json_encode($update));
+    LogHelper::update(json_encode($input));
 } catch (\Throwable $th) {
     TelegramHelper::send_message("CANT STORE :( ", $_ENV["ADMIN"]);
 }
