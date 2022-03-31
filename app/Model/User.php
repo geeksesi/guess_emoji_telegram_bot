@@ -69,7 +69,7 @@ final class User extends Model
     {
         return GameLog::get_first(
             "WHERE user_id=:user_id AND level_id=:level_id",
-            [":user_id" => $this->id, ":level_id" => $this->level()->id],
+            [":user_id" => $this->id, ":level_id" => $this->level()->id ?? 0],
             "ORDER BY hint_count DESC"
         )->hint_count ?? 0;
     }
