@@ -19,24 +19,18 @@ class RedisHelper
     {
         $redis = self::connection();
         $count_key = "user-message-count-" . $user->chat_id;
-        $last_message = "user-last-message-" . $user->chat_id;
 
         if (!$increment) {
             return $redis->get($count_key) ?? 0;
         }
         $pipe = $redis->pipeline();
 
-        $count_period = time() - 60 * 60 * 10;
-        $last_message_time = (int) $redis->get($last_message) ?? time();
-        if ($last_message_time < $count_period) {
-            $pipe->set($count_key, 0);
-        }
         if ($redis->exists($count_key)) {
             $pipe->incr($count_key);
         } else {
             $pipe->set($count_key, 1);
         }
-        $pipe->set($last_message, time());
+        $pipe->expire($count_key, 60 * 60 * 12);
 
         $pipe->execute();
     }
