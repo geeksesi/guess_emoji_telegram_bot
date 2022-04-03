@@ -22,13 +22,13 @@ class RedisHelper
         $last_message = "user-last-message-" . $user->chat_id;
 
         if (!$increment) {
-            return $redis->get($count_key);
+            return $redis->get($count_key) ?? 0;
         }
         $pipe = $redis->pipeline();
 
         $count_period = time() - 60 * 60 * 10;
-
-        if ($redis->get($last_message) ?? time() < $count_period) {
+        $last_message_time = (int) $redis->get($last_message) ?? time();
+        if ($last_message_time < $count_period) {
             $pipe->set($count_key, 0);
         }
         if ($redis->exists($count_key)) {
