@@ -10,6 +10,7 @@ use App\Controller\Admin\HelpController;
 use App\Controller\Admin\ListHintsController;
 use App\Controller\Admin\ListLevelsController;
 use App\Controller\Admin\ListOutputMessagesController;
+use App\Controller\Command\ChatIdCommandController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
 use App\Controller\Keyboard\AboutKeyboardController;
@@ -77,6 +78,11 @@ class InputHelper
         if ($admin = $this->admin()) {
             return $admin;
         }
+        if (isset($this->update["message"]["text"])) {
+            if ($this->update["message"]["text"] == "/chat_id") {
+                return (new ChatIdCommandController($this->update))();
+            }
+        }
         if ($this->update["message"]["chat"]["id"] != $_ENV["ADMIN_GP"]) {
             return null;
         }
@@ -112,6 +118,9 @@ class InputHelper
         switch ($this->update["message"]["text"]) {
             case "/start":
                 return (new StartCommandController($this->update))();
+                break;
+            case "/chat_id":
+                return (new ChatIdCommandController($this->update))();
                 break;
 
             default:
