@@ -49,7 +49,7 @@ final class Level extends Model
     public function on_create()
     {
         // Get all users whom has no any level to play
-        $users = User::get_all("WHERE level IS NULL", []);
+        $users = User::get_all("WHERE level_id IS NULL", []);
         foreach ($users as $user) {
             $user->level_id = $this->id;
             // Notif to user for new mission
