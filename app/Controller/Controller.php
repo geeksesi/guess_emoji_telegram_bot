@@ -32,12 +32,10 @@ abstract class Controller
     {
         $message_count = RedisHelper::user_message_count($this->user, false);
         if ($message_count % 5 != 0) {
-            var_dump("WRONG !");
             return;
         }
         $div = $message_count / 5;
         if ($div != 1 && $div % 4 != 0) {
-            var_dump("WRONG @", $div);
             return;
         }
         // Do advertisement :)
@@ -46,15 +44,12 @@ abstract class Controller
             [":user_id" => $this->user->id, ":status" => 1]
         );
         if (!$advertise) {
-            var_dump("NO AD");
             return;
         }
 
         if (!HelperTelegramHelper::forward($this->chat_id, $advertise->from_chat_id, $advertise->message_id)) {
-            var_dump("FORWARD PROBLEM");
             return;
         }
-        var_dump("HELLO");
 
         $transaction = Transaction::create([
             "balance" => $advertise->gift_credit,

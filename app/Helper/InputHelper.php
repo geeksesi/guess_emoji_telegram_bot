@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use App\Controller\Admin\AddHintController;
 use App\Controller\Admin\AddLevelController;
+use App\Controller\Admin\AddNewAdvertiseController;
 use App\Controller\Admin\AddOutputMessageController;
 use App\Controller\Admin\GetUserByChatIdController;
 use App\Controller\Admin\HelpController;
@@ -220,6 +221,9 @@ class InputHelper
                 break;
             case "!getUserId":
                 return (new GetUserByChatIdController($this->update))();
+                break;
+            case "!newAds":
+                return (new AddNewAdvertiseController($this->update))();
                 break;
 
             default:
