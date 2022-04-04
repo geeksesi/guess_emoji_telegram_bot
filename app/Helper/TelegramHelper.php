@@ -36,6 +36,9 @@ class TelegramHelper
         if (!empty($_parameters)) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($_parameters));
         }
+        if (!empty($_ENV["PROXY"])) {
+            curl_setopt($curl, CURLOPT_PROXY, $_ENV["PROXY"]);
+        }
         curl_setopt($curl, CURLOPT_HTTPHEADER, ["Content-Type:application/json"]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
