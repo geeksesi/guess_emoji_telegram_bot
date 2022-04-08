@@ -24,10 +24,11 @@ class OutputHelper
             $message = OutputMessage::by_type($_type);
         }
         if (empty($message)) {
-            return false;
+            $text = $_type->name;
+        } else {
+            $text = $message->text;
         }
 
-        $text = $message->text;
 
         if (!empty($data)) {
             $text = self::fill_data($message->text, $data);

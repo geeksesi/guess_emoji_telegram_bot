@@ -10,13 +10,15 @@ enum OutputMessageEnum: int
     case LEVEL = 4;
     case FINISH_GAME = 5;
 
-    // about keyboards
+    // Main keyboards
     case START_GAME = 20;
     case CONTINUE = 21;
     case ABOUT = 22;
     case CONTACT = 23;
     case SUPPORT = 25;
     case YOUTUBE = 26;
+    case PROFILE = 27;
+    case BACK = 28;
 
     // Commands
     case START_COMMAND_GUEST = 30;

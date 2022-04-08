@@ -28,10 +28,12 @@ class InputHelper
         'آموزش ساخت بازی' => 'YoutubeKeyboardController',
         'شروع بازی'       => 'GameStartKeyboardController',
         'درباره ما'       => 'AboutKeyboardController',
+        'پروفایل'         => 'ProfileKeyboardController',
         'تماس با ما'      => 'ContactKeyboardController',
         'کمک می‌خوای'      => 'HintKeyboardController',
         'حمایت از ما'     => 'SupportKeyboardController',
         'سکه‌های شما'      => 'YourCreditKeyboardController',
+        'بازگشت'          => 'BackKeyboardController',
     ];
 
     private string $controllersNs = 'App\Controller\Keyboard';
