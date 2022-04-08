@@ -10,8 +10,7 @@ class ProfileKeyboardController extends Controller
 {
     public function __invoke(): bool
     {
-        // Start Message
-        OutputHelper::by_type($this->chat_id, OutputMessageEnum::PROFILE);
+        OutputHelper::profile($this->chat_id , $this->user);
 
         return true;
     }

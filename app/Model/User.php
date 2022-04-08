@@ -31,8 +31,7 @@ final class User extends Model
 
     public function level()
     {
-        $level = Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
-        return $level;
+        return Level::get_first("WHERE id=:id", ["id" => $this->level_id]);
     }
 
     public static function get_or_create(string $_chat_id): self
