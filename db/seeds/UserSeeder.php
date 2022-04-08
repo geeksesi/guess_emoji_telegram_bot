@@ -18,17 +18,14 @@ class UserSeeder extends AbstractSeed
      */
     public function run()
     {
-        $level = $this->fetchRow("SELECT * FROM levels ORDER BY orders DESC") ?? ["orders" => 0];
-
         $faker = Faker\Factory::create();
         $data = [];
-        $level = $level["orders"];
 
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 "chat_id" => $faker->text(),
                 "credit" => rand(50, 500),
-                "level" => rand(0, $level),
+                "level_id" => rand(0, 100),
                 "invite_key" => uniqid(),
             ];
         }
