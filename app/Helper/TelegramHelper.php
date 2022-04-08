@@ -154,4 +154,18 @@ class TelegramHelper
 
         return self::execute("forwardMessage", $query);
     }
+
+    /**
+     * @param  string  $_chat_id
+     *
+     * @return false|string
+     */
+    public static function get_first_name(string $_chat_id): bool|string
+    {
+        $user = self::get_user($_chat_id);
+        if (!isset($user['result']['first_name'])) {
+            return false;
+        }
+        return $user['result']['first_name'];
+    }
 }

@@ -3,6 +3,7 @@ namespace App\Model;
 
 use App\Enums\OutputMessageEnum;
 use App\Helper\OutputHelper;
+use App\Helper\TelegramHelper;
 use PDO;
 
 final class User extends Model
@@ -10,6 +11,8 @@ final class User extends Model
     protected static $table = "users";
     protected static $fields = [
         "id" => PDO::PARAM_INT,
+        "name" => PDO::PARAM_STR,
+        "image_id" => PDO::PARAM_STR,
         "chat_id" => PDO::PARAM_STR,
         "credit" => PDO::PARAM_INT,
         "level_id" => PDO::PARAM_INT,
@@ -20,6 +23,10 @@ final class User extends Model
 
     public function __construct()
     {
+        if ($this->name == 'unknown') {
+            $this->name = TelegramHelper::get_first_name($this->chat_id);
+            $this->save();
+        }
     }
 
     public function level()
@@ -34,6 +41,7 @@ final class User extends Model
         if (!$user || empty($user)) {
             $user = self::create([
                 "chat_id" => $_chat_id,
+                "name" => TelegramHelper::get_first_name($_chat_id),
                 "credit" => $_ENV["DEFAULT_CREDIT"],
                 "level_id" => $_ENV["START_LEVEL_ID"],
             ]);

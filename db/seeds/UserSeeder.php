@@ -24,6 +24,7 @@ class UserSeeder extends AbstractSeed
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 "chat_id" => $faker->text(),
+                "name" => $faker->name(),
                 "credit" => rand(50, 500),
                 "level_id" => rand(0, 100),
                 "invite_key" => uniqid(),
