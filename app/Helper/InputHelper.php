@@ -14,22 +14,27 @@ use App\Controller\Admin\ListOutputMessagesController;
 use App\Controller\Command\ChatIdCommandController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
-use App\Controller\Keyboard\AboutKeyboardController;
-use App\Controller\Keyboard\BuyCreditKeyboardController;
-use App\Controller\Keyboard\ContactKeyboardController;
-use App\Controller\Keyboard\FreeCreditKeyboardController;
-use App\Controller\Keyboard\GameContinueKeyboardController;
-use App\Controller\Keyboard\GameStartKeyboardController;
-use App\Controller\Keyboard\HintKeyboardController;
-use App\Controller\Keyboard\LeaderBoardKeyboardController;
-use App\Controller\Keyboard\SupportKeyboardController;
-use App\Controller\Keyboard\YourCreditKeyboardController;
-use App\Controller\Keyboard\YoutubeKeyboardController;
 use App\Model\User;
 
 class InputHelper
 {
     private $update;
+
+    private array $replays = [
+        'سکه رایگان'      => 'FreeCreditKeyboardController',
+        'برترین ها'       => 'LeaderBoardKeyboardController',
+        'ادامه بازی'      => 'GameContinueKeyboardController',
+        'خرید سکه'        => 'BuyCreditKeyboardController',
+        'آموزش ساخت بازی' => 'YoutubeKeyboardController',
+        'شروع بازی'       => 'GameStartKeyboardController',
+        'درباره ما'       => 'AboutKeyboardController',
+        'تماس با ما'      => 'ContactKeyboardController',
+        'کمک می‌خوای'      => 'HintKeyboardController',
+        'حمایت از ما'     => 'SupportKeyboardController',
+        'سکه‌های شما'      => 'YourCreditKeyboardController',
+    ];
+
+    private string $controllersNs = 'App\Controller\Keyboard';
 
     public function __construct(array $update)
     {
@@ -51,25 +56,22 @@ class InputHelper
 
     public function run()
     {
-        switch ($this->update["message"]["chat"]["type"]) {
-            case "private":
-                return $this->private();
-                break;
-            case "group":
-            case "supergroup":
-                return $this->group();
-                break;
-        }
+        return match ($this->update["message"]["chat"]["type"]) {
+            "private" => $this->private(),
+            "group", "supergroup" => $this->group(),
+        };
     }
+
     private function private()
     {
-        if (!User::get_first("WHERE chat_id=:chat_id", [":chat_id" => $this->update["message"]["chat"]["id"]])) {
+        if ( ! User::get_first("WHERE chat_id=:chat_id", [":chat_id" => $this->update["message"]["chat"]["id"]])) {
             return (new StartCommandController($this->update))();
         }
 
         if (isset($this->update["message"]["text"])) {
             return $this->text();
         }
+
         return null;
     }
 
@@ -111,74 +113,27 @@ class InputHelper
         if ($admin = $this->admin()) {
             return $admin;
         }
+
         return $this->game();
     }
 
     private function native_commands()
     {
-        switch ($this->update["message"]["text"]) {
-            case "/start":
-                return (new StartCommandController($this->update))();
-                break;
-            case "/chat_id":
-                return (new ChatIdCommandController($this->update))();
-                break;
-
-            default:
-                return null;
-                break;
-        }
+        return match ($this->update["message"]["text"]) {
+            "/start" => (new StartCommandController($this->update))(),
+            "/chat_id" => (new ChatIdCommandController($this->update))(),
+            default => null,
+        };
     }
 
     private function reply_keyboard()
     {
-        switch ($this->update["message"]["text"]) {
-            case "💸 سکه رایگان":
-                return (new FreeCreditKeyboardController($this->update))();
-                break;
-            case "🥇 برترین ها":
-                return (new LeaderBoardKeyboardController($this->update))();
-                break;
-            case "❣️ ادامه بازی":
-                return (new GameContinueKeyboardController($this->update))();
-                break;
-            case "💳 خرید سکه":
-                return (new BuyCreditKeyboardController($this->update))();
-                break;
-            // case "💵 سکه‌های شما‌ : ":
-            //     return (new YourCreditKeyboardController($this->update))();
-            //     break;
-            case "آموزش ساخت بازی 🕹":
-                return (new YoutubeKeyboardController($this->update))();
-                break;
-            case "شروع بازی":
-                return (new GameStartKeyboardController($this->update))();
-                break;
-            case "ادامه بازی":
-                return (new GameStartKeyboardController($this->update))();
-                break;
-            case "🖥 درباره ما":
-                return (new AboutKeyboardController($this->update))();
-                break;
-            case "📞 تماس با ما":
-                return (new ContactKeyboardController($this->update))();
-                break;
-            // case "🪄 کمک می‌خوای ؟":
-            //     return (new HintKeyboardController($this->update))();
-            //     break;
-            case "😍 حمایت از ما":
-                return (new SupportKeyboardController($this->update))();
-                break;
+        foreach ($this->replays as $text => $class) {
+            if (str_contains($this->update["message"]["text"], $text)) {
+                $class = $this->controllersNs.'\\'.$class;
 
-            default:
-                break;
-        }
-
-        if (stripos($this->update["message"]["text"], "کمک می‌خوای")) {
-            return (new HintKeyboardController($this->update))();
-        }
-        if (stripos($this->update["message"]["text"], "سکه‌های شما‌")) {
-            return (new YourCreditKeyboardController($this->update))();
+                return (new $class($this->update))();
+            }
         }
 
         return false;
@@ -197,40 +152,19 @@ class InputHelper
             return false;
         }
         $command = substr($this->update["message"]["text"], 0, 10);
-        switch ($command) {
-            case "!help":
-                return (new HelpController($this->update))();
-                break;
-            case "!aNewLevel":
-                return (new AddLevelController($this->update))();
-                break;
-            case "!aNewHints":
-                return (new AddHintController($this->update))();
-                break;
-            case "!aOuttexts":
-                return (new AddOutputMessageController($this->update))();
-                break;
-            case "!listLevel":
-                return (new ListLevelsController($this->update))();
-                break;
-            case "!listHints":
-                return (new ListHintsController($this->update))();
-                break;
-            case "!listOMesg":
-                return (new ListOutputMessagesController($this->update))();
-                break;
-            case "!getUserId":
-                return (new GetUserByChatIdController($this->update))();
-                break;
-            case "!newAds":
-                return (new AddNewAdvertiseController($this->update))();
-                break;
 
-            default:
-                return false;
-                break;
-        }
-        return false;
+        return match ($command) {
+            "!help" => (new HelpController($this->update))(),
+            "!aNewLevel" => (new AddLevelController($this->update))(),
+            "!aNewHints" => (new AddHintController($this->update))(),
+            "!aOuttexts" => (new AddOutputMessageController($this->update))(),
+            "!listLevel" => (new ListLevelsController($this->update))(),
+            "!listHints" => (new ListHintsController($this->update))(),
+            "!listOMesg" => (new ListOutputMessagesController($this->update))(),
+            "!getUserId" => (new GetUserByChatIdController($this->update))(),
+            "!newAds" => (new AddNewAdvertiseController($this->update))(),
+            default => false,
+        };
     }
 
     private function game()
