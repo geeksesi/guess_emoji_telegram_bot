@@ -48,14 +48,26 @@ final class User extends Model
         return $user;
     }
 
-    public function next_level()
+    public function next_level($increase_difficulty = false)
     {
-        $next_level = Level::get_first(
-            "WHERE id NOT IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) AND difficulty <= (SELECT MAX(difficulty) FROM levels WHERE id IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) )",
-            [":user_id" => $this->id, ":user_id" => $this->id],
-            "ORDER BY RAND()"
-        );
+        if($increase_difficulty)
+            $next_level = Level::get_first(
+                "WHERE id NOT IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) AND difficulty <= (SELECT MAX(difficulty)+1 FROM levels WHERE id IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) )",
+                [":user_id" => $this->id, ":user_id" => $this->id],
+                "ORDER BY RAND()"
+            );
+        }else{
+            $next_level = Level::get_first(
+                "WHERE id NOT IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) AND difficulty <= (SELECT MAX(difficulty) FROM levels WHERE id IN (SELECT level_id FROM game_logs WHERE user_id=:user_id) )",
+                [":user_id" => $this->id, ":user_id" => $this->id],
+                "ORDER BY RAND()"
+            );
+        }
+
         $this->level_id = $next_level->id ?? null;
+        if($this->level_id === null && !$increase_difficulty){
+            $this->next_level(true);
+        }
         $this->save();
         if ($this->level_id) {
             $level = $this->level();
