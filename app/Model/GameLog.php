@@ -66,4 +66,18 @@ final class GameLog extends Model
         }
         $log->save();
     }
+
+    public static function user_level_count(User $user): int
+    {
+        $table = self::$table;
+        $db = self::connection();
+
+        $query = $db->prepare("SELECT count(*) FROM {$table} WHERE user_id=:user_id");
+
+        if (!$query->execute([":user_id" => $user->id])) {
+            return 0;
+        }
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        return $result["count(*)"];
+    }
 }

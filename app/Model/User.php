@@ -89,4 +89,9 @@ final class User extends Model
         }
         return $_ENV["BOT_LINK"] . "?start=" . $this->invite_key;
     }
+
+    public function level_count(): int
+    {
+        return GameLog::user_level_count($this);
+    }
 }

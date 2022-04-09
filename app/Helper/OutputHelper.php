@@ -29,7 +29,6 @@ class OutputHelper
             $text = $message->text;
         }
 
-
         if (!empty($data)) {
             $text = self::fill_data($message->text, $data);
         }
@@ -102,20 +101,22 @@ class OutputHelper
         self::by_type($_chat_id, OutputMessageEnum::LOW_CREDIT);
     }
 
-    public static function profile(string $_chat_id , User $user)
+    public static function profile(string $_chat_id, User $user)
     {
         $image = $user->image_id ?? TelegramHelper::get_user_profile_photo($_chat_id);
         $keyboard = KeyboardMakerHepler::by_type(OutputMessageEnum::PROFILE);
         $now = new \DateTime();
         $from = new \DateTime($user->created_at);
         $diff = $now->diff($from);
-        $message = <<<EOT
-نام : {$user->name}
-تعداد سکه : {$user->credit}
-سطح : {$user->level()->difficulty} 
-عضو از : {$diff->days} روز قبل
-------
-EOT;
+
+        $message = "شما {$user->name} هستی، فقط هم مال مایی 😌";
+        $message .= "\n";
+        $message .= "ماشالله {$user->credit} 💰 سکه داری 🤧";
+        $message .= "\n";
+        $message .= "اولین بار از  {$diff->days} روز پیش داری بازی می کنی 😍";
+        $message .= "\n";
+        $message .= "تو این چند وقت به {$user->level_count()} تا مرحله جواب دادی 😦";
+
         TelegramHelper::send_photo($image, $_chat_id, $message, $keyboard);
     }
 }
