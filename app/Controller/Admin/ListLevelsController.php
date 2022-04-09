@@ -28,7 +28,6 @@ class ListLevelsController extends Controller
     {
         $output = "مرحله : ";
         $output .= $level->id . " - ";
-        $output .= $level->orders . " :-: ";
         $output .= $level->quest . " :: ";
         $output .= $level->answer . " :: ";
         $output .= $level->difficulty . " \n ";
