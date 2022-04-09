@@ -19,5 +19,7 @@ class ExceptionHepler
             var_dump($this->err);
         }
         TelegramHelper::send_message("WE HAVE AN ERROR : " . $this->err->getMessage(), $_ENV["ADMIN"]);
+
+        error_log($this->err);
     }
 }
