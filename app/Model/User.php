@@ -79,8 +79,9 @@ final class User extends Model
     public function hint_cost(): int
     {
         $cost = 25;
+        $cost += ($this->level()->difficulty * 3);
         $hint_count = $this->hint_count();
-        $cost = $cost + $hint_count * 14;
+        $cost += $hint_count * 14;
         return $cost;
     }
 
