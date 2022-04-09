@@ -21,6 +21,7 @@ class AddNewAdvertiseController extends Controller
             "message_id" => $reply["message_id"],
             "from_chat_id" => $reply["chat"]["id"],
         ]);
+        TelegramHelper::send_message("Success", $this->chat_id);
 
         return true;
     }
