@@ -15,28 +15,29 @@ use App\Controller\Command\ChatIdCommandController;
 use App\Controller\Command\StartCommandController;
 use App\Controller\Game\GameController;
 use App\Model\User;
+use Exception;
 
 class InputHelper
 {
     private $update;
 
     private array $replays = [
-        'سکه رایگان'      => 'FreeCreditKeyboardController',
-        'برترین ها'       => 'LeaderBoardKeyboardController',
-        'ادامه بازی'      => 'GameContinueKeyboardController',
-        'خرید سکه'        => 'BuyCreditKeyboardController',
-        'آموزش ساخت بازی' => 'YoutubeKeyboardController',
-        'شروع بازی'       => 'GameStartKeyboardController',
-        'درباره ما'       => 'AboutKeyboardController',
-        'پروفایل'         => 'ProfileKeyboardController',
-        'تماس با ما'      => 'ContactKeyboardController',
-        'کمک می‌خوای'      => 'HintKeyboardController',
-        'حمایت از ما'     => 'SupportKeyboardController',
-        'بازگشت'          => 'BackKeyboardController',
+        "سکه رایگان" => "FreeCreditKeyboardController",
+        "برترین ها" => "LeaderBoardKeyboardController",
+        "ادامه بازی" => "GameContinueKeyboardController",
+        "خرید سکه" => "BuyCreditKeyboardController",
+        "آموزش ساخت بازی" => "YoutubeKeyboardController",
+        "شروع بازی" => "GameStartKeyboardController",
+        "درباره ما" => "AboutKeyboardController",
+        "پروفایل" => "ProfileKeyboardController",
+        "تماس با ما" => "ContactKeyboardController",
+        "کمک می‌خوای" => "HintKeyboardController",
+        "حمایت از ما" => "SupportKeyboardController",
         "سکه‌های شما" => "ProfileKeyboardController",
+        "بازگشت" => "BackKeyboardController",
     ];
 
-    private string $controllersNs = 'App\Controller\Keyboard';
+    private string $controllersNs = "App\Controller\Keyboard";
 
     public function __construct(array $update)
     {
@@ -61,13 +62,13 @@ class InputHelper
         return match ($this->update["message"]["chat"]["type"]) {
             "private" => $this->private(),
             "group", "supergroup" => $this->group(),
-            default => false,
+            default => false
         };
     }
 
     private function private()
     {
-        if ( ! User::get_first("WHERE chat_id=:chat_id", [":chat_id" => $this->update["message"]["chat"]["id"]])) {
+        if (!User::get_first("WHERE chat_id=:chat_id", [":chat_id" => $this->update["message"]["chat"]["id"]])) {
             return (new StartCommandController($this->update))();
         }
 
@@ -125,7 +126,7 @@ class InputHelper
         return match ($this->update["message"]["text"]) {
             "/start" => (new StartCommandController($this->update))(),
             "/chat_id" => (new ChatIdCommandController($this->update))(),
-            default => false,
+            default => false
         };
     }
 
@@ -133,7 +134,7 @@ class InputHelper
     {
         foreach ($this->replays as $text => $class) {
             if (str_contains($this->update["message"]["text"], $text)) {
-                $class = $this->controllersNs.'\\'.$class;
+                $class = $this->controllersNs . "\\" . $class;
 
                 return (new $class($this->update))();
             }
@@ -166,7 +167,7 @@ class InputHelper
             "!listOMesg" => (new ListOutputMessagesController($this->update))(),
             "!getUserId" => (new GetUserByChatIdController($this->update))(),
             "!newAds" => (new AddNewAdvertiseController($this->update))(),
-            default => false,
+            default => false
         };
     }
 
