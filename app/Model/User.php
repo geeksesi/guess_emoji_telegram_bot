@@ -40,7 +40,7 @@ final class User extends Model
         if (!$user || empty($user)) {
             $user = self::create([
                 "chat_id" => $_chat_id,
-                "name" => TelegramHelper::get_first_name($_chat_id),
+                "name" => TelegramHelper::get_first_name($_chat_id) ?? "ناشناس",
                 "credit" => $_ENV["DEFAULT_CREDIT"],
                 "level_id" => $_ENV["START_LEVEL_ID"],
             ]);
@@ -79,7 +79,7 @@ final class User extends Model
     public function hint_cost(): int
     {
         $cost = 25;
-        $cost += ($this->level()->difficulty * 3);
+        $cost += $this->level()?->difficulty * 3;
         $hint_count = $this->hint_count();
         $cost += $hint_count * 14;
         return $cost;
