@@ -61,6 +61,7 @@ class InputHelper
         return match ($this->update["message"]["chat"]["type"]) {
             "private" => $this->private(),
             "group", "supergroup" => $this->group(),
+            default => false,
         };
     }
 
@@ -124,7 +125,7 @@ class InputHelper
         return match ($this->update["message"]["text"]) {
             "/start" => (new StartCommandController($this->update))(),
             "/chat_id" => (new ChatIdCommandController($this->update))(),
-            default => null,
+            default => false,
         };
     }
 
