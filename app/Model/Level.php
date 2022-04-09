@@ -43,7 +43,7 @@ final class Level extends Model
 
     public function prize(): int
     {
-        return 20 + 5 * $this->difficulty;
+        return 18 + 5 * $this->difficulty;
     }
 
     public function on_create()
@@ -52,8 +52,9 @@ final class Level extends Model
         $users = User::get_all("WHERE level_id IS NULL", []);
         foreach ($users as $user) {
             $user->level_id = $this->id;
+            $user->save();
             // Notif to user for new mission
-            // OutputHelper::new_level($user);
+            OutputHelper::new_level($user);
         }
     }
 }
