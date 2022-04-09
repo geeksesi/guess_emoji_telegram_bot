@@ -23,7 +23,7 @@ final class User extends Model
 
     public function __construct()
     {
-        if ($this->name == 'unknown') {
+        if (empty($this->name)) {
             $this->name = TelegramHelper::get_first_name($this->chat_id);
             $this->save();
         }
