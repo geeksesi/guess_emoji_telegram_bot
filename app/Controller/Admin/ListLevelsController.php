@@ -13,7 +13,7 @@ class ListLevelsController extends Controller
         $page = substr($this->update["message"]["text"], 11, 15) ?? 1;
         $page = empty($page) ? 1 : (int) $page;
 
-        $levels = Level::get_paginate("", [], "ORDER BY orders ASC", $page);
+        $levels = Level::get_paginate("", [], "ORDER BY difficulty ASC", $page);
 
         $text_out = "";
         foreach ($levels as $level) {
