@@ -14,17 +14,13 @@ class LevelSeeder extends AbstractSeed
      */
     public function run()
     {
-        $level = $this->fetchRow("SELECT * FROM levels ORDER BY orders DESC") ?? ["orders" => 0];
-
         $faker = Faker\Factory::create();
         $data = [];
-        $orders = $level["orders"];
         for ($i = 0; $i < 100; $i++) {
             $data[] = [
                 "quest" => $faker->text(20),
                 "answer" => $faker->text(20),
-                "orders" => ++$orders,
-                "difficulty" => round($orders / 10, 0),
+                "difficulty" => rand(0, 100),
             ];
         }
 

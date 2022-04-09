@@ -24,10 +24,11 @@ class OutputHelper
             $message = OutputMessage::by_type($_type);
         }
         if (empty($message)) {
-            return false;
+            $text = $_type->name;
+        } else {
+            $text = $message->text;
         }
 
-        $text = $message->text;
 
         if (!empty($data)) {
             $text = self::fill_data($message->text, $data);
@@ -99,5 +100,22 @@ class OutputHelper
     public static function low_credit(string $_chat_id)
     {
         self::by_type($_chat_id, OutputMessageEnum::LOW_CREDIT);
+    }
+
+    public static function profile(string $_chat_id , User $user)
+    {
+        $image = $user->image_id ?? TelegramHelper::get_user_profile_photo($_chat_id);
+        $keyboard = KeyboardMakerHepler::by_type(OutputMessageEnum::PROFILE);
+        $now = new \DateTime();
+        $from = new \DateTime($user->created_at);
+        $diff = $now->diff($from);
+        $message = <<<EOT
+نام : {$user->name}
+تعداد سکه : {$user->credit}
+سطح : {$user->level()->difficulty} 
+عضو از : {$diff->days} روز قبل
+------
+EOT;
+        TelegramHelper::send_photo($image, $_chat_id, $message, $keyboard);
     }
 }

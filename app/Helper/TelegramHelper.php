@@ -154,4 +154,58 @@ class TelegramHelper
 
         return self::execute("forwardMessage", $query);
     }
+
+    /**
+     * @param  string  $_chat_id
+     *
+     * @return false|string
+     */
+    public static function get_first_name(string $_chat_id): bool|string
+    {
+        $user = self::get_user($_chat_id);
+        if (!isset($user['result']['first_name'])) {
+            return false;
+        }
+        return $user['result']['first_name'];
+    }
+
+    /**
+     * @param  string  $_chat_id
+     *
+     * @return bool|string
+     * @throws \Exception
+     */
+    public static function get_user_profile_photo(string $_chat_id): bool|string
+    {
+        $user = self::get_user($_chat_id);
+        if (!isset($user['result']['id'])) {
+            return false;
+        }
+        return self::execute('getUserProfilePhotos', [
+            'user_id' => $user['result']['id'],
+            'limit'   => 1,
+        ])['result']['photos'][0][0]['file_id'];
+    }
+
+    /**
+     * @param  string  $file_id
+     * @param  string  $_chat_id
+     * @param  string|null  $caption
+     * @param  array  $_keyboard
+     *
+     * @return bool|array
+     * @throws \Exception
+     */
+    public static function send_photo(string $file_id, string $_chat_id, string $caption = null, array $_keyboard = []): bool|array
+    {
+        $parameters = [
+            'photo' => $file_id,
+            'chat_id' => $_chat_id,
+            'caption' => $caption,
+        ];
+        if (!empty($_keyboard)) {
+            $parameters["reply_markup"] = $_keyboard;
+        }
+        return self::execute('sendPhoto', $parameters);
+    }
 }

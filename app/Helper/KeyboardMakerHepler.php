@@ -18,7 +18,9 @@ class KeyboardMakerHepler
         "contact" => "📞 تماس با ما",
         "hint" => "🪄 کمک می‌خوای ؟",
         "support" => "😍 حمایت از ما",
-        "profile" => "💀 پروفایل",
+        "profile" => "👤 پروفایل",
+        "change" => "تغییر پروفایل 📝",
+        "back" => "بازگشت 🔙",
     ];
 
     public static function by_type(OutputMessageEnum $type)
@@ -117,8 +119,25 @@ class KeyboardMakerHepler
             true
         );
     }
+
     public static function FINISH_GAME()
     {
         return self::no_mission();
+    }
+
+    public static function profile(): array
+    {
+        return TelegramHelper::make_keyboard(
+            [
+                [["text" => self::$texts["change"]], ["text" => self::$texts["back"]]],
+            ],
+            true,
+            true
+        );
+    }
+
+    public static function back(): array
+    {
+        return self::default_keyboard();
     }
 }
