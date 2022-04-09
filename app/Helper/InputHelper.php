@@ -32,8 +32,8 @@ class InputHelper
         'تماس با ما'      => 'ContactKeyboardController',
         'کمک می‌خوای'      => 'HintKeyboardController',
         'حمایت از ما'     => 'SupportKeyboardController',
-        'سکه‌های شما'      => 'YourCreditKeyboardController',
         'بازگشت'          => 'BackKeyboardController',
+        "سکه‌های شما" => "ProfileKeyboardController",
     ];
 
     private string $controllersNs = 'App\Controller\Keyboard';
