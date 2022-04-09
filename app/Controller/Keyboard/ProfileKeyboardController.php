@@ -10,7 +10,7 @@ class ProfileKeyboardController extends Controller
 {
     public function __invoke(): bool
     {
-        OutputHelper::profile($this->chat_id , $this->user);
+        OutputHelper::self_profile($this->chat_id , $this->user , true);
 
         return true;
     }
