@@ -90,10 +90,6 @@ class OutputHelper
         $message .= "پیام بالا رو برای دوستات بفرست، اونها رو به بازی دعوت کن و 80 تا سکه بگیر 🤩";
         $message .= "\n";
         $message .= "راستی دوستت هم 40 تا سکه بیشتر می گیره اول بازی. فقط به خاطر اینکه دوست شماست 😉";
-        $message .= "\n";
-        $message .= "🔗 اینم لینک اختصاصی شماست : ";
-        $message .= $_user->invite_link();
-
         TelegramHelper::send_message($message, $_user->chat_id, $keyboard);
     }
 
@@ -115,7 +111,7 @@ class OutputHelper
 
         if ($user->credit <= 10) {
             $message .= "هیچی سکه نداری که 🤐 برو بخر 🤑";
-        } elseif ($user->credit <= $_ENV['DEFAULT_CREDIT'] / 2) {
+        } elseif ($user->credit <= $_ENV["DEFAULT_CREDIT"] / 2) {
             $message .= "فقط {$user->credit} سکه داریا 🥺 برو سکه بخر 🤑  ";
         } else {
             $message .= "ماشالله {$user->credit} 💰 سکه داری 🤧";
@@ -143,16 +139,16 @@ class OutputHelper
 
         if ($user->credit <= 10) {
             $message .= "هیچیم سکه نداره 🤦🏻‍♂️";
-        } elseif ($user->credit <= $_ENV['DEFAULT_CREDIT'] / 2) {
+        } elseif ($user->credit <= $_ENV["DEFAULT_CREDIT"] / 2) {
             $message .= "فقطم {$user->credit} سکه داره 🤷🏻‍♂️ ";
         } else {
             $message .= "ماشالله {$user->credit} 💰 سکه داره 🤧";
         }
 
         $message .= "\n";
-        if ($diff->days < 2){
+        if ($diff->days < 2) {
             $message .= "تازه شروع کرده بازی کردن هنوز نوبه 🤓";
-        }else{
+        } else {
             $message .= "از {$diff->days} روزه پیش شروع کرده به بازی کردن 😍";
         }
 
