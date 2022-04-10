@@ -70,9 +70,9 @@ class OutputHelper
     public static function leader_board(string $_chat_id)
     {
         $keyboard = KeyboardMakerHepler::leader_board();
-        $users = User::get_top(10);
+        $users = User::get_top(5);
 
-        $message = "🏆 لیست برترین ها 🏆";
+        $message = "🏆 لیست برترین های امروز 🏆";
         $message .= "\n\n";
 
         foreach ($users as $key => $user) {
@@ -83,7 +83,7 @@ class OutputHelper
             } elseif ($key == 2) {
                 $message .= "🥉 ";
             } else {
-                $message .= ($key + 1);
+                $message .= $key + 1;
             }
             $message .= ". " . $user->name;
             $message .= "\n";
@@ -164,7 +164,6 @@ class OutputHelper
 
         if ($user->credit <= 10) {
             $message .= "هیچیم سکه نداره 🤦🏻‍♂️";
-
         } elseif ($user->credit <= $_ENV["DEFAULT_CREDIT"] / 2) {
             $message .= "فقطم {$user->credit} سکه داره 🤷🏻‍♂️ ";
         } else {
