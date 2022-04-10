@@ -70,7 +70,32 @@ class OutputHelper
     public static function leader_board(string $_chat_id)
     {
         $keyboard = KeyboardMakerHepler::leader_board();
-        TelegramHelper::send_message("در دست احداث 👷 ", $_chat_id, $keyboard);
+        $users = User::get_top(10);
+
+        $message = "🏆 لیست برترین ها 🏆";
+        $message .= "\n\n";
+
+        foreach ($users as $key => $user) {
+            if ($key == 0) {
+                $message .= "🥇 ";
+            } elseif ($key == 1) {
+                $message .= "🥈 ";
+            } elseif ($key == 2) {
+                $message .= "🥉 ";
+            } else {
+                $message .= ($key + 1);
+            }
+            $message .= ". " . $user->name;
+            $message .= "\n";
+            $message .= " سطح " . $user->level_count();
+            $message .= "\n";
+            $message .= " پروفایل /user_" . $user->id;
+            $message .= "\n";
+            $message .= "---------------";
+            $message .= "\n";
+        }
+
+        TelegramHelper::send_message($message, $_chat_id, $keyboard);
     }
 
     public static function free_credit(User $_user)
