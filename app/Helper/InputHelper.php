@@ -37,7 +37,15 @@ class InputHelper
         "بازگشت" => "BackKeyboardController",
     ];
 
-    private string $controllersNs = "App\Controller\Keyboard";
+    private array $commands = [
+        '/start'   => 'StartCommandController',
+        '/chat_id' => 'ChatIdCommandController',
+        '/user_' => 'UserCommandController',
+    ];
+
+    private string $keyboardControllersNs = 'App\Controller\Keyboard';
+
+    private string $commandControllersNs = 'App\Controller\Command';
 
     public function __construct(array $update)
     {
@@ -123,24 +131,12 @@ class InputHelper
 
     private function native_commands()
     {
-        return match ($this->update["message"]["text"]) {
-            "/start" => (new StartCommandController($this->update))(),
-            "/chat_id" => (new ChatIdCommandController($this->update))(),
-            default => false
-        };
+        return $this->resolve($this->commandControllersNs, $this->commands);
     }
 
     private function reply_keyboard()
     {
-        foreach ($this->replays as $text => $class) {
-            if (str_contains($this->update["message"]["text"], $text)) {
-                $class = $this->controllersNs . "\\" . $class;
-
-                return (new $class($this->update))();
-            }
-        }
-
-        return false;
+        return $this->resolve($this->keyboardControllersNs, $this->replays);
     }
 
     private function admin()
@@ -174,5 +170,17 @@ class InputHelper
     private function game()
     {
         return (new GameController($this->update))();
+    }
+
+    private function resolve(string $controllersNs, array $resolve)
+    {
+        foreach ($resolve as $text => $class) {
+            if (str_contains($this->update["message"]["text"], $text)) {
+                $class = $controllersNs.'\\'.$class;
+
+                return (new $class($this->update))();
+            }
+        }
+        return false;
     }
 }

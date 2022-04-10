@@ -80,7 +80,7 @@ class KeyboardMakerHepler
         return TelegramHelper::make_keyboard(
             [
                 [["text" => $credit_text], ["text" => self::$texts["youtube"]], self::$texts["free_credit"]],
-                [["text" => $help_text], ["text" => self::$texts["buy_credit"]]],
+                [["text" => self::$texts['back']], ["text" => $help_text], ["text" => self::$texts["buy_credit"]]],
             ],
             true,
             true

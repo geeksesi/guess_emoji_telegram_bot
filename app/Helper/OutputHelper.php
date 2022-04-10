@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Controller\Keyboard\ProfileKeyboardController;
 use App\Enums\OutputMessageEnum;
 use App\Model\OutputMessage;
 use App\Model\User;
@@ -101,7 +102,7 @@ class OutputHelper
         self::by_type($_chat_id, OutputMessageEnum::LOW_CREDIT);
     }
 
-    public static function profile(string $_chat_id, User $user)
+    public static function self_profile(string $_chat_id, User $user)
     {
         $image = $user->image_id ?? TelegramHelper::get_user_profile_photo($_chat_id);
         $keyboard = KeyboardMakerHepler::by_type(OutputMessageEnum::PROFILE);
@@ -111,12 +112,53 @@ class OutputHelper
 
         $message = "شما {$user->name} هستی، فقط هم مال مایی 😌";
         $message .= "\n";
-        $message .= "ماشالله {$user->credit} 💰 سکه داری 🤧";
+
+        if ($user->credit <= 10) {
+            $message .= "هیچی سکه نداری که 🤐 برو بخر 🤑";
+        } elseif ($user->credit <= $_ENV['DEFAULT_CREDIT'] / 2) {
+            $message .= "فقط {$user->credit} سکه داریا 🥺 برو سکه بخر 🤑  ";
+        } else {
+            $message .= "ماشالله {$user->credit} 💰 سکه داری 🤧";
+        }
+
         $message .= "\n";
         $message .= "اولین بار از  {$diff->days} روز پیش داری بازی می کنی 😍";
         $message .= "\n";
         $message .= "تو این چند وقت به {$user->level_count()} تا مرحله جواب دادی 😦";
+        $message .= "\n";
+        $message .= "شناستم اینه 🆔  /user_{$user->id}";
 
         TelegramHelper::send_photo($image, $_chat_id, $message, $keyboard);
+    }
+
+    public static function profile(string $_chat_id, User $user)
+    {
+        $image = $user->image_id ?? TelegramHelper::get_user_profile_photo($_chat_id);
+        $now = new \DateTime();
+        $from = new \DateTime($user->created_at);
+        $diff = $now->diff($from);
+
+        $message = "اسمش {$user->name}";
+        $message .= "\n";
+
+        if ($user->credit <= 10) {
+            $message .= "هیچیم سکه نداره 🤦🏻‍♂️";
+        } elseif ($user->credit <= $_ENV['DEFAULT_CREDIT'] / 2) {
+            $message .= "فقطم {$user->credit} سکه داره 🤷🏻‍♂️ ";
+        } else {
+            $message .= "ماشالله {$user->credit} 💰 سکه داره 🤧";
+        }
+
+        $message .= "\n";
+        if ($diff->days < 2){
+            $message .= "تازه شروع کرده بازی کردن هنوز نوبه 🤓";
+        }else{
+            $message .= "از {$diff->days} روزه پیش شروع کرده به بازی کردن 😍";
+        }
+
+        $message .= "\n";
+        $message .= "تو این چند وقت به {$user->level_count()} تا مرحله جواب داده 😦";
+
+        TelegramHelper::send_photo($image, $_chat_id, $message, []);
     }
 }

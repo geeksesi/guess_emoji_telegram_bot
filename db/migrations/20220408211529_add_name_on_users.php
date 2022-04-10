@@ -21,7 +21,10 @@ final class AddNameOnUsers extends AbstractMigration
     {
         $table = $this->table('users');
         $table->addColumn('name', 'string')
-            ->addColumn('image_id', 'string', ['null' => true])
+            ->addColumn('image_id', 'string', [
+                'null'    => true,
+                'default' => 'unknown',
+            ])
             ->update();
     }
 }
