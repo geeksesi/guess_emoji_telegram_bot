@@ -109,7 +109,9 @@ final class User extends Model
         $table = self::$table;
         $db = self::connection();
 
-        $query = $db->prepare("SELECT users.*,(SELECT COUNT(*) FROM game_logs WHERE user_id=users.id) AS level_count FROM $table ORDER BY level_count DESC LIMIT $limit");
+        $query = $db->prepare(
+            "SELECT users.*, COUNT(game_logs.id) as level_count FROM $table inner join game_logs on users.id=game_logs.user_id GROUP BY users.id ORDER BY `level_count` DESC  LIMIT $limit"
+        );
 
         if (!$query->execute()) {
             return false;
