@@ -126,7 +126,7 @@ class OutputHelper
     public static function self_profile(string $_chat_id, User $user)
     {
         $image =
-            $user->image_id ?? "AgACAgQAAxkBAAJJZWJSQ4Ow74exe2ROMYpf3smmkDrQAAKrtzEbk8WYUpdq7J6ksckVAQADAgADeAADIwQ";
+            empty($user->image_id) ? "AgACAgQAAxkBAAJJZWJSQ4Ow74exe2ROMYpf3smmkDrQAAKrtzEbk8WYUpdq7J6ksckVAQADAgADeAADIwQ" : $user->image_id;
         $keyboard = KeyboardMakerHepler::by_type(OutputMessageEnum::PROFILE);
         $now = new \DateTime();
         $from = new \DateTime($user->created_at);
@@ -156,7 +156,7 @@ class OutputHelper
     public static function profile(string $_chat_id, User $user)
     {
         $image =
-            $user->image_id ?? "AgACAgQAAxkBAAJJZWJSQ4Ow74exe2ROMYpf3smmkDrQAAKrtzEbk8WYUpdq7J6ksckVAQADAgADeAADIwQ";
+            empty($user->image_id) ? "AgACAgQAAxkBAAJJZWJSQ4Ow74exe2ROMYpf3smmkDrQAAKrtzEbk8WYUpdq7J6ksckVAQADAgADeAADIwQ" : $user->image_id;
         $now = new \DateTime();
         $from = new \DateTime($user->created_at);
         $diff = $now->diff($from);
