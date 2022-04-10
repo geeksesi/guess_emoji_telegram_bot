@@ -26,7 +26,12 @@ final class User extends Model
         if (empty($this->name)) {
             $this->name = TelegramHelper::get_first_name($this->chat_id) ?? "ناشناس";
             $this->image_id = TelegramHelper::get_user_profile_photo($this->chat_id) ?? "";
-            $this->save();
+            try {
+                $this->save();
+            } catch (\Throwable $th) {
+                $this->name = "ناشناس";
+                $this->save();
+            }
         }
     }
 
