@@ -1,5 +1,7 @@
 # ربات تلگرام حدس ایموجی
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 داخل این مخزن کد های دوره ساخت ربات تلگرام‌ای که داخل یوتیوب منتشر می‌کنم رو می تونید ببینید.
 
 برای دیدن کد هر قسمت به release یا branch مخصوص به همون قسمت مراجعه کنید.
