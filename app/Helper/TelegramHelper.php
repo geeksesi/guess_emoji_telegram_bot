@@ -49,20 +49,20 @@ class TelegramHelper
         }
         curl_close($curl);
         if (!is_null($error)) {
-            (new ExceptionHepler(new \Exception("CURL :" . curl_error($curl))))();
+            //(new ExceptionHepler(new \Exception("CURL :" . curl_error($curl))))();
             return false ;
         }
 
         $output = json_decode($result, true);
         if (is_null($output)) {
-            $exp = new \Exception("CURL : EMPTY RESPONSE");
-            (new ExceptionHepler($exp))();
+            //$exp = new \Exception("CURL : EMPTY RESPONSE");
+            //(new ExceptionHepler($exp))();
             return false ;
             
         }
         if (!isset($output["ok"]) || !$output["ok"]) {
-            $exp =  new \Exception("TG : " . json_encode($output["description"]));
-            (new ExceptionHepler($exp))();
+            //$exp =  new \Exception("TG : " . json_encode($output["description"]));
+            //(new ExceptionHepler($exp))();
             return false ;
             
         }
