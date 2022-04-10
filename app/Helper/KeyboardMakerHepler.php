@@ -20,7 +20,7 @@ class KeyboardMakerHepler
         "support" => "😍 حمایت از ما",
         "profile" => "👤 پروفایل",
         "change" => "تغییر پروفایل 📝",
-        "back" => "بازگشت 🔙",
+        "back" => "منوی اصلی 🔙",
     ];
 
     public static function by_type(OutputMessageEnum $type)
@@ -80,10 +80,11 @@ class KeyboardMakerHepler
         return TelegramHelper::make_keyboard(
             [
                 [["text" => $credit_text], ["text" => self::$texts["youtube"]], self::$texts["free_credit"]],
-                [["text" => self::$texts['back']], ["text" => $help_text], ["text" => self::$texts["buy_credit"]]],
+                [["text" => self::$texts["back"]], ["text" => self::$texts["buy_credit"]]],
+                [["text" => $help_text]],
             ],
-            true,
-            true
+            false,
+            false
         );
     }
 
@@ -128,9 +129,7 @@ class KeyboardMakerHepler
     public static function profile(): array
     {
         return TelegramHelper::make_keyboard(
-            [
-                [["text" => self::$texts["change"]], ["text" => self::$texts["back"]]],
-            ],
+            [[["text" => self::$texts["change"]], ["text" => self::$texts["back"]]]],
             true,
             true
         );

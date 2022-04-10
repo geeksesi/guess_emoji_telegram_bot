@@ -34,18 +34,18 @@ class InputHelper
         "کمک می‌خوای" => "HintKeyboardController",
         "حمایت از ما" => "SupportKeyboardController",
         "سکه‌های شما" => "ProfileKeyboardController",
-        "بازگشت" => "BackKeyboardController",
+        "منوی اصلی" => "BackKeyboardController",
     ];
 
     private array $commands = [
-        '/start'   => 'StartCommandController',
-        '/chat_id' => 'ChatIdCommandController',
-        '/user_' => 'UserCommandController',
+        "/start" => "StartCommandController",
+        "/chat_id" => "ChatIdCommandController",
+        "/user_" => "UserCommandController",
     ];
 
-    private string $keyboardControllersNs = 'App\Controller\Keyboard';
+    private string $keyboardControllersNs = "App\Controller\Keyboard";
 
-    private string $commandControllersNs = 'App\Controller\Command';
+    private string $commandControllersNs = "App\Controller\Command";
 
     public function __construct(array $update)
     {
@@ -176,7 +176,7 @@ class InputHelper
     {
         foreach ($resolve as $text => $class) {
             if (str_contains($this->update["message"]["text"], $text)) {
-                $class = $controllersNs.'\\'.$class;
+                $class = $controllersNs . "\\" . $class;
 
                 return (new $class($this->update))();
             }
