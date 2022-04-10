@@ -23,10 +23,6 @@ final class User extends Model
 
     public function __construct()
     {
-        if (empty($this->name)) {
-            $this->name = TelegramHelper::get_first_name($this->chat_id);
-            $this->save();
-        }
     }
 
     public function level()
@@ -106,5 +102,18 @@ final class User extends Model
     public function level_count(): int
     {
         return GameLog::user_level_count($this);
+    }
+
+    public static function get_top(int $limit): array
+    {
+        $table = self::$table;
+        $db = self::connection();
+
+        $query = $db->prepare("SELECT users.*,(SELECT COUNT(*) FROM game_logs WHERE user_id=users.id) AS level_count FROM $table ORDER BY level_count DESC LIMIT $limit");
+
+        if (!$query->execute()) {
+            return false;
+        }
+        return $query->fetchAll(PDO::FETCH_CLASS, self::class);
     }
 }
