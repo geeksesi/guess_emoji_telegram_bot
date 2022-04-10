@@ -184,7 +184,7 @@ class TelegramHelper
         return self::execute("getUserProfilePhotos", [
             "user_id" => $user["result"]["id"],
             "limit" => 1,
-        ])["result"]["photos"][0][0]["file_id"] ?? null;
+        ])["result"]["photos"][0][0]["file_id"] ?? '';
     }
 
     /**
