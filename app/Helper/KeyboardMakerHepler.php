@@ -55,7 +55,11 @@ class KeyboardMakerHepler
                     ["text" => self::$texts["free_credit"]],
                     ["text" => self::$texts["support"]],
                 ],
-                [["text" => self::$texts["profile"]], ["text" => self::$texts["buy_credit"]]],
+                [
+                    ["text" => self::$texts["profile"]],
+                    ["text" => self::$texts["leader_board"]],
+                    ["text" => self::$texts["buy_credit"]]
+                ],
                 [
                     ["text" => self::$texts["about"]],
                     ["text" => self::$texts["youtube"]],
@@ -90,7 +94,13 @@ class KeyboardMakerHepler
 
     public static function leader_board()
     {
-        return self::default_keyboard();
+        return TelegramHelper::make_keyboard(
+            [
+                [["text" => self::$texts["back"]]],
+            ],
+            true,
+            true
+        );
     }
 
     public static function free_credit()

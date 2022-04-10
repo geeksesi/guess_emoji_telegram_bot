@@ -11,7 +11,7 @@ class LeaderBoardKeyboardController extends Controller
 {
     public function __invoke(): bool
     {
-        TelegramHelper::send_message("در دست احداث", $this->chat_id);
+        OutputHelper::leader_board($this->chat_id);
 
         return true;
     }
