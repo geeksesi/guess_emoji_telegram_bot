@@ -57,8 +57,8 @@ class KeyboardMakerHepler
                 ],
                 [
                     ["text" => self::$texts["profile"]],
-                    ["text" => self::$texts["leader_board"]],
                     ["text" => self::$texts["buy_credit"]]
+                    // ["text" => self::$texts["leader_board"]],
                 ],
                 [
                     ["text" => self::$texts["about"]],
