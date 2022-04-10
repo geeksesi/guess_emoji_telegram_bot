@@ -23,6 +23,11 @@ final class User extends Model
 
     public function __construct()
     {
+        if (empty($this->name)) {
+            $this->name = TelegramHelper::get_first_name($this->chat_id) ?? "ناشناس";
+            $this->image_id = TelegramHelper::get_user_profile_photo($this->chat_id) ?? "";
+            $this->save();
+        }
     }
 
     public function level()
