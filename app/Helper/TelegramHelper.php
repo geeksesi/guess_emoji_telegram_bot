@@ -163,10 +163,10 @@ class TelegramHelper
     public static function get_first_name(string $_chat_id): bool|string
     {
         $user = self::get_user($_chat_id);
-        if (!isset($user['result']['first_name'])) {
-            return false;
+        if (!isset($user["result"]["first_name"])) {
+            return "";
         }
-        return $user['result']['first_name'];
+        return $user["result"]["first_name"] ?? "";
     }
 
     /**
@@ -178,13 +178,13 @@ class TelegramHelper
     public static function get_user_profile_photo(string $_chat_id): bool|string
     {
         $user = self::get_user($_chat_id);
-        if (!isset($user['result']['id'])) {
+        if (!isset($user["result"]["id"])) {
             return false;
         }
-        return self::execute('getUserProfilePhotos', [
-            'user_id' => $user['result']['id'],
-            'limit'   => 1,
-        ])['result']['photos'][0][0]['file_id'];
+        return self::execute("getUserProfilePhotos", [
+            "user_id" => $user["result"]["id"],
+            "limit" => 1,
+        ])["result"]["photos"][0][0]["file_id"] ?? null;
     }
 
     /**
@@ -196,16 +196,20 @@ class TelegramHelper
      * @return bool|array
      * @throws \Exception
      */
-    public static function send_photo(string $file_id, string $_chat_id, string $caption = null, array $_keyboard = []): bool|array
-    {
+    public static function send_photo(
+        string $file_id,
+        string $_chat_id,
+        string $caption = null,
+        array $_keyboard = []
+    ): bool|array {
         $parameters = [
-            'photo' => $file_id,
-            'chat_id' => $_chat_id,
-            'caption' => $caption,
+            "photo" => $file_id,
+            "chat_id" => $_chat_id,
+            "caption" => $caption,
         ];
         if (!empty($_keyboard)) {
             $parameters["reply_markup"] = $_keyboard;
         }
-        return self::execute('sendPhoto', $parameters);
+        return self::execute("sendPhoto", $parameters);
     }
 }

@@ -16,6 +16,8 @@ class HelpController extends Controller
         $message .= "!listHints - list of hints \n";
         $message .= "!aOuttexts - add new output message \n";
         $message .= "!listOMesg - list of output messages by types \n";
+        $message .= "!newAds - reply to message to add advertise \n";
+        $message .= "!getUserId - user id in each line give you user info \n";
 
         TelegramHelper::send_message($message, $this->chat_id);
         return true;
