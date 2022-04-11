@@ -28,5 +28,7 @@ jobs:
                   key: ${{ secrets.KEY }}
                   port: ${{ secrets.PORT }}
                   script: |
-                      whoami
-                      ls -la
+                      cd /home/ubuntu/public_html/emoji_game
+                      git pull
+                      composer i
+                      "./vendor/bin/phinx migrate"
