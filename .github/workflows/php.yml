@@ -3,16 +3,6 @@ name: PHP Composer
 on:
     push:
         branches: [master]
-    workflow_call:
-        secrets:
-            HOST:
-                required: true
-            USERNAME:
-                required: true
-            KEY:
-                required: true
-            PORT:
-                required: true
 permissions:
     contents: read
 
@@ -28,7 +18,6 @@ jobs:
             #       run: composer run-script test
     deploy:
         name: deploy
-        environment: deploy
         runs-on: ubuntu-latest
         steps:
             - name: executing remote ssh commands using password
