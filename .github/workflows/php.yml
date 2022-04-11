@@ -38,6 +38,6 @@ jobs:
               uses: creyD/prettier_action@v4.2
               with:
                   only_changed: True
-                  prettier_plugins: @prettier/plugin-php
+                  prettier_plugins: "@prettier/plugin-php"
                   commit_message: style - prettier
                   prettier_options: --write app/
