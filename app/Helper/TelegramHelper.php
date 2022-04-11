@@ -50,21 +50,19 @@ class TelegramHelper
         curl_close($curl);
         if (!is_null($error)) {
             //(new ExceptionHepler(new \Exception("CURL :" . curl_error($curl))))();
-            return false ;
+            return false;
         }
 
         $output = json_decode($result, true);
         if (is_null($output)) {
             //$exp = new \Exception("CURL : EMPTY RESPONSE");
             //(new ExceptionHepler($exp))();
-            return false ;
-            
+            return false;
         }
         if (!isset($output["ok"]) || !$output["ok"]) {
             //$exp =  new \Exception("TG : " . json_encode($output["description"]));
             //(new ExceptionHepler($exp))();
-            return false ;
-            
+            return false;
         }
         return $output;
     }
@@ -191,7 +189,7 @@ class TelegramHelper
         return self::execute("getUserProfilePhotos", [
             "user_id" => $user["result"]["id"],
             "limit" => 1,
-        ])["result"]["photos"][0][0]["file_id"] ?? '';
+        ])["result"]["photos"][0][0]["file_id"] ?? "";
     }
 
     /**

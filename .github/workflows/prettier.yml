@@ -24,4 +24,4 @@ jobs:
                   only_changed: True
                   prettier_plugins: "@prettier/plugin-php"
                   commit_message: style - prettier
-                  prettier_options: --write app/
+                  prettier_options: --write ./app ./public/ ./db/ ./Templates/

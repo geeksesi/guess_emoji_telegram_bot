@@ -18,16 +18,16 @@ final class CreateTransactionsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('transactions');
+        $table = $this->table("transactions");
         $table
-            ->addColumn('balance', 'integer')
-            ->addColumn('type', 'integer')
-            ->addColumn('payment_id', 'integer', [
-                'default' => null,
-                'null' => true,
+            ->addColumn("balance", "integer")
+            ->addColumn("type", "integer")
+            ->addColumn("payment_id", "integer", [
+                "default" => null,
+                "null" => true,
             ])
-            ->addColumn('created_at', 'timestamp', [
-                'default' => 'CURRENT_TIMESTAMP',
+            ->addColumn("created_at", "timestamp", [
+                "default" => "CURRENT_TIMESTAMP",
             ])
             ->create();
     }

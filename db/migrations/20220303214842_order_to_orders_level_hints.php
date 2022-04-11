@@ -18,7 +18,7 @@ final class OrderToOrdersLevelHints extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('level_hints');
-        $table->renameColumn('order', 'orders')->update();
+        $table = $this->table("level_hints");
+        $table->renameColumn("order", "orders")->update();
     }
 }

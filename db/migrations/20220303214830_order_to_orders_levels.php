@@ -18,7 +18,7 @@ final class OrderToOrdersLevels extends AbstractMigration
      */
     public function up(): void
     {
-        $table = $this->table('levels');
-        $table->renameColumn('order', 'orders')->update();
+        $table = $this->table("levels");
+        $table->renameColumn("order", "orders")->update();
     }
 }

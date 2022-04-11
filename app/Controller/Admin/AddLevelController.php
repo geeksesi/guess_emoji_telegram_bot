@@ -32,8 +32,13 @@ class AddLevelController extends Controller
 
         $level = Level::create(["quest" => $question, "answer" => $answer, "difficulty" => $difficualty]);
         // $auto_hints = LevelHintsHelper::generate($level);
-        TelegramHelper::send_message("مرحله جدید : " . $level->quest . " :: " . $level->answer . "\n لطفا طبق ساختار زیر راهنمایی اضافه کنید", $this->chat_id);
-        TelegramHelper::send_message("!aNewHints " . $level->id . " \n HINT - 1 \n HINT - 2 \n HINT - 3 \n HINT - 4", $this->chat_id);
-
+        TelegramHelper::send_message(
+            "مرحله جدید : " . $level->quest . " :: " . $level->answer . "\n لطفا طبق ساختار زیر راهنمایی اضافه کنید",
+            $this->chat_id
+        );
+        TelegramHelper::send_message(
+            "!aNewHints " . $level->id . " \n HINT - 1 \n HINT - 2 \n HINT - 3 \n HINT - 4",
+            $this->chat_id
+        );
     }
 }
