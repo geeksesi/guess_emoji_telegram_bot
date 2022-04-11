@@ -31,4 +31,3 @@ jobs:
                       cd /home/${{secrets.USERNAME}}/public_html/emoji_game
                       git pull
                       composer i
-                      "/home/${{secrets.USERNAME}}/public_html/emoji_game/vendor/bin/phinx migrate"
