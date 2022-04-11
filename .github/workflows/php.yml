@@ -28,6 +28,7 @@ jobs:
             #       run: composer run-script test
     deploy:
         name: deploy
+        environment: deploy
         runs-on: ubuntu-latest
         steps:
             - name: executing remote ssh commands using password
