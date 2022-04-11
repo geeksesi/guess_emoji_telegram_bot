@@ -38,7 +38,6 @@ class InputHelper
     ];
 
     private array $commands = [
-
         "/start" => "StartCommandController",
         "/chat_id" => "ChatIdCommandController",
         "/user_" => "UserCommandController",
@@ -59,6 +58,9 @@ class InputHelper
 
     public function __invoke()
     {
+        if (!isset($this->update["message"])) {
+            return;
+        }
         try {
             $this->run();
         } catch (\Throwable $th) {
@@ -177,7 +179,6 @@ class InputHelper
     {
         foreach ($resolve as $text => $class) {
             if (str_contains($this->update["message"]["text"], $text)) {
-
                 $class = $controllersNs . "\\" . $class;
 
                 return (new $class($this->update))();
