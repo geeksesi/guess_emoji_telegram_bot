@@ -33,10 +33,10 @@ jobs:
         steps:
             - name: executing remote ssh commands using password
               uses: appleboy/ssh-action@master
-              host: ${{ secrets.HOST }}
-              username: ${{ secrets.USERNAME }}
-              key: ${{ secrets.KEY }}
-              port: ${{ secrets.PORT }}
+              host: ${{ deploy.HOST }}
+              username: ${{ deploy.USERNAME }}
+              key: ${{ deploy.KEY }}
+              port: ${{ deploy.PORT }}
               script: |
                   whoami
                   ls -la
