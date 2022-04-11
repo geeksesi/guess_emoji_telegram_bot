@@ -19,20 +19,27 @@ jobs:
             - name: Validate composer.json and composer.lock
               run: composer validate --strict
 
-            - name: Cache Composer packages
-              id: composer-cache
-              uses: actions/cache@v3
-              with:
-                  path: vendor
-                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-php-
+            # - name: Cache Composer packages
+            #   id: composer-cache
+            #   uses: actions/cache@v3
+            #   with:
+            #       path: vendor
+            #       key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+            #       restore-keys: |
+            #           ${{ runner.os }}-php-
 
-            - name: Install dependencies
-              run: composer install --prefer-dist --no-progress
+            # - name: Install dependencies
+            #   run: composer install --prefer-dist --no-progress
 
             #     - name: Run test suite
             #       run: composer run-script test
+              - name: deploy
+                uses: appleboy/ssh-action@master
+                host: ${{ deploy.HOST }}
+                username: ${{ deploy.USERNAME }}
+                key: ${{ deploy.KEY }}
+                port: ${{ deploy.PORT }}
+                script: whoami
 
             # - name: Prettier Action
             #   uses: creyD/prettier_action@v4.2
