@@ -46,7 +46,7 @@ final class User extends Model
         if (!$user || empty($user)) {
             $user = self::create([
                 "chat_id" => $_chat_id,
-                "name" => TelegramHelper::get_first_name($_chat_id) ?? "ناشناس",
+                //"name" => TelegramHelper::get_first_name($_chat_id) ?? "ناشناس",
                 "credit" => $_ENV["DEFAULT_CREDIT"],
                 "level_id" => $_ENV["START_LEVEL_ID"],
             ]);
