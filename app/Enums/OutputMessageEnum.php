@@ -10,6 +10,8 @@ enum OutputMessageEnum: int
     case LEVEL = 4;
     case FINISH_GAME = 5;
 
+    case LEVEL_CLOSE = 6;
+
     // Main keyboards
     case START_GAME = 20;
     case CONTINUE = 21;

@@ -50,6 +50,12 @@ class OutputHelper
         self::level($_user);
     }
 
+    public static function close_level(User $_user)
+    {
+        self::by_type($_user->chat_id, OutputMessageEnum::LEVEL_CLOSE, true);
+        self::level($_user);
+    }
+
     public static function new_level(User $_user)
     {
         self::by_type($_user->chat_id, OutputMessageEnum::NEW_LEVEL, true);
