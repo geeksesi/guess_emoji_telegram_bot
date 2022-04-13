@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use App\Helper\OutputHelper;
+use App\Services\Normalizer;
 use PDO;
 
 final class Level extends Model
@@ -22,9 +23,10 @@ final class Level extends Model
 
     public function check_level(string $text): bool
     {
-        if ($text == $this->answer) {
+        if (Normalizer::run($text) == Normalizer::run($this->answer)) {
             return true;
         }
+
         return false;
     }
 
