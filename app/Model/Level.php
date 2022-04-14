@@ -3,7 +3,7 @@ namespace App\Model;
 
 use App\Helper\OutputHelper;
 use App\Helper\TelegramHelper;
-use App\Services\Normalizer;
+use App\Helper\Normalizer;
 use PDO;
 
 final class Level extends Model
