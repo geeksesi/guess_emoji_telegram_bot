@@ -18,5 +18,16 @@
     "robmorgan/phinx": "^0.12.10",
     "fakerphp/faker": "^1.19",
     "predis/predis": "^1.1"
+  },
+  "require-dev": {
+    "pestphp/pest": "^1.21"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+      "test":"pest"
   }
 }
