@@ -31,7 +31,6 @@ class GameController extends Controller
 
         $score = $level->check_level($_text);
         if ($score == 100) {
-            TelegramHelper::send_message("{$score}%", "894565544");
             // Prize
             $prize = $level->prize();
             GameLog::action($level, $this->user, GameLogActionEnum::WIN, $prize);
