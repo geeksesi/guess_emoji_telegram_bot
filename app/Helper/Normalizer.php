@@ -22,8 +22,14 @@ class Normalizer
         return str_replace($arabic, $persian, $string);
     }
 
+    /**
+     * Remove white space and half space (persian ‌)
+     *
+     * @param string $string
+     * @return string
+     */
     public static function whitespace(string $string): string
     {
-        return preg_replace("/\s+/", "", $string);
+        return preg_replace("/(\‌|\s))+/", "", $string);
     }
 }
