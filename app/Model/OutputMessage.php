@@ -31,7 +31,7 @@ final class OutputMessage extends Model
             throw new \Exception("Error on get " . $t . " ids for random", 500);
         }
         $ids_result = $ids_query->fetchAll(PDO::FETCH_ASSOC);
-        $ids = array_column($ids_result, "id");
+        $ids = array_column($ids_result, "id") ?? [];
         $id = $ids[array_rand($ids)];
 
         return self::find($id);
