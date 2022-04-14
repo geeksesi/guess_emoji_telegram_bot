@@ -16,17 +16,22 @@ class GameController extends Controller
     public function __invoke(): bool
     {
         $this->run_game($this->update["message"]["text"]);
+
         return true;
     }
 
     public function run_game($_text)
     {
         $level = $this->user->level();
-        if (!$level) {
+        if ( ! $level) {
             OutputHelper::level($this->user);
+
             return true;
         }
-        if ($level->check_level($_text)) {
+
+        $score = $level->check_level($_text);
+        if ($score == 100) {
+            TelegramHelper::send_message("{$score}%",'894565544');
             // Prize
             $prize = $level->prize();
             GameLog::action($level, $this->user, GameLogActionEnum::WIN, $prize);
@@ -36,7 +41,7 @@ class GameController extends Controller
             // add Transaction
             $transaction = Transaction::create([
                 "balance" => $prize,
-                "type" => TransactionTypeEnum::WIN_LEVEL->value,
+                "type"    => TransactionTypeEnum::WIN_LEVEL->value,
                 "user_id" => $this->user->id,
             ]);
             // calculate credit
@@ -49,9 +54,12 @@ class GameController extends Controller
             }
 
             return;
+        } elseif ($score > 75) {
+            OutputHelper::close_level($this->user);
+        } else {
+            OutputHelper::lose_level($this->user);
         }
-        GameLog::action($level, $this->user, GameLogActionEnum::LOSE);
 
-        OutputHelper::lose_level($this->user);
+        GameLog::action($level, $this->user, GameLogActionEnum::LOSE);
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use App\Helper\OutputHelper;
+use App\Helper\TelegramHelper;
 use App\Services\Normalizer;
 use PDO;
 
@@ -21,13 +22,14 @@ final class Level extends Model
     {
     }
 
-    public function check_level(string $text): bool
+    public function check_level(string $text): int
     {
         if (Normalizer::run($text) == Normalizer::run($this->answer)) {
-            return true;
+            return 100;
         }
+        similar_text(Normalizer::run($text), Normalizer::run($this->answer), $percent);
 
-        return false;
+        return round($percent);
     }
 
     public function auto_generate_hints()
