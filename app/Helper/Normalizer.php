@@ -30,6 +30,6 @@ class Normalizer
      */
     public static function whitespace(string $string): string
     {
-        return preg_replace("/(\‌|\s))+/", "", $string);
+        return preg_replace("/(\‌|\s)+/", "", $string);
     }
 }
