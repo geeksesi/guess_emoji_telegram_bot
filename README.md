@@ -53,3 +53,7 @@ https://api.telegram.org/botTOKEN/setWebhook?url=URL
 
 # راه اندازی 
 [Wiki](https://github.com/geeksesi/guess_emoji_telegram_bot/wiki)
+
+
+# Copyright
+ایده این ربات از ربات [hadsemojibot](https://t.me/hadsemojibot) گرفته شده است.
