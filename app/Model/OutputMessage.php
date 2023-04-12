@@ -32,6 +32,9 @@ final class OutputMessage extends Model
         }
         $ids_result = $ids_query->fetchAll(PDO::FETCH_ASSOC);
         $ids = array_column($ids_result, "id") ?? [];
+        if (empty($ids)) {
+            return null;
+        }
         $id = $ids[array_rand($ids)] ?? null;
 
         if (is_null($id)) {
